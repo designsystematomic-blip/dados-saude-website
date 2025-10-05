@@ -1,0 +1,61 @@
+.loginPage {
+  position: relative;
+  height: 100vh;
+}
+
+.headerLogo {
+  padding-top: 24px;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginContent {
+  gap: 24px;
+  margin-top: 30%;
+}
+
+.passwordContainer {
+  gap: 8px;
+}
+
+.forgotPassword {
+  text-align: right;
+  color: var(--color-link-primary);
+}
+
+.forgotPassword:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.buttonContainer {
+  width: 100%;
+  justify-content: center;
+}
+
+.buttonContainer button {
+  align-self: center;
+}
+
+.register {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+.signUp {
+  color: var(--color-link-secondary);
+  font-weight: 600;
+}
+
+@media screen and (min-width: 767px) {
+  .loginContent {
+    max-width: 480px;
+    margin: auto;
+  }
+}
