@@ -1,18 +1,16 @@
-import { useMemo, useState } from "react";
 import type { Route } from "../../routes/+types/login";
 import { Title, Wrapper, Input, Button, Text } from "dados-saude";
 import logoWithName from "../../assets/logoMedium.png";
 
-import styles from "./Login.module.css";
+import styles from "./ForgotPassword.module.css";
 import { Link, useFetcher } from "react-router";
 import { useForm } from "react-hook-form";
 import { loginFormSchema } from "~/zod/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterText } from "~/components";
 
-export default function Login({ loaderData }: Route.ComponentProps) {
+export default function ForgotPassword({ loaderData }: Route.ComponentProps) {
   const fetcherLogin = useFetcher({ key: "login" });
-  const [isDisabled, setIsDisabled] = useState(true);
 
   const {
     register,
@@ -23,21 +21,12 @@ export default function Login({ loaderData }: Route.ComponentProps) {
   });
 
   const handleFetcher = (data: any) => {
-    console.log("erros", errors);
-    console.log("data", data);
-    console.log("erros", errors);
-
-    // Só envia se não houver erros
-    if (Object.keys(errors).length > 0) {
+    if (errors.email || errors.password) {
       return;
     }
 
-    console.log("data", data);
-
     fetcherLogin.submit(data, { method: "post", action: "/login" });
   };
-
-  console.log("formstate", errors);
 
   return (
     <div className={styles.loginPage}>
@@ -49,14 +38,21 @@ export default function Login({ loaderData }: Route.ComponentProps) {
           <form
             method="post"
             className={styles.loginContent + " " + styles.flexColumn}
-            onSubmit={handleSubmit(handleFetcher)}
+            onSubmit={handleSubmit((data) => handleFetcher(data))}
           >
             <Title
               tag="h1"
               variant="primary"
-              content="Entre na sua conta"
+              content="Esqueci a minha senha"
               align="left"
             />
+            <div>
+              <Text
+                content="Digite o seu e-mail cadastrado e em instantes vamos te enviar um link para que você possa criar uma nova senha."
+                variant="primary"
+                size="medium"
+              />
+            </div>
             <Input
               id="email"
               ariaLabel="E-mail"
@@ -68,27 +64,6 @@ export default function Login({ loaderData }: Route.ComponentProps) {
               {...register("email")}
               style={{ border: errors.email ? "1px solid red" : "" }}
             />
-            <div className={styles.passwordContainer + " " + styles.flexColumn}>
-              <Input
-                id="password"
-                ariaLabel="Senha"
-                labelId="password"
-                description=""
-                label="Senha"
-                type="password"
-                placeholder="Digite a sua senha"
-                {...register("password")}
-                style={{ border: errors.password ? "1px solid red" : "" }}
-              />
-              <Link
-                to={"/forgot-password"}
-                className={
-                  styles.forgotPassword + " " + "textMedium fontSecondary"
-                }
-              >
-                Esqueci a minha senha{" "}
-              </Link>
-            </div>
             <div className={styles.buttonContainer + " " + styles.flexColumn}>
               <Button
                 type="submit"

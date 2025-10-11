@@ -1,0 +1,18 @@
+.headerLogo {
+  padding-top: 24px;
+}
+
+.headerLogo img {
+  width: 124px;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 767px) {
+  .headerLogo {
+    padding: 24px 0;
+    text-align: center;
+  }
+  .headerLogo img {
+    width: 240px;
+  }
+}

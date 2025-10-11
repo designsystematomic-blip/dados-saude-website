@@ -1,34 +1,17 @@
-.loginPage {
+.page {
   position: relative;
   height: 100vh;
-}
-
-.headerLogo {
-  padding-top: 24px;
-}
-
-.headerLogo img {
-  width: 124px;
-  object-fit: cover;
 }
 
 .flexColumn {
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
-.loginContent {
+.content {
   gap: 24px;
   margin-top: 30%;
-}
-
-.passwordContainer {
-  gap: 8px;
-}
-
-.forgotPassword {
-  text-align: right;
-  color: var(--color-link-primary);
 }
 
 .buttonContainer {
@@ -40,33 +23,42 @@
   align-self: center;
 }
 
-.register {
+.bottomText {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-top: 16px;
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
-  align-items: center;
 }
 
-.signUp {
+.link,
+.link:visited {
   color: var(--color-link-secondary);
   font-weight: 600;
 }
 
+.policyText {
+  margin-top: 40px;
+}
+
+.stepOne,
+.stepTwo {
+  display: none;
+}
+
+.stepOne.isVisible,
+.stepTwo.isVisible {
+  display: flex;
+}
+
 @media screen and (min-width: 767px) {
-  .loginContent {
+  .content {
     max-width: 480px;
     margin: auto;
     box-shadow: 0px -1px 20px #0000001a;
     padding: 80px;
     border-radius: 20px;
-  }
-
-  .headerLogo {
-    padding: 24px 0;
-    text-align: center;
-  }
-  .headerLogo img {
-    width: 240px;
   }
 }
