@@ -1,5 +1,5 @@
 import type { Route } from "../../routes/+types/register";
-import { Title, Wrapper, Input, Button, Text } from "dados-saude";
+import { Title, Wrapper, Input, Button, Text, Select } from "dados-saude";
 
 import styles from "./Register.module.css";
 import { Link, useFetcher } from "react-router";
@@ -14,20 +14,31 @@ export default function Register({ loaderData }: Route.ComponentProps) {
 
   const [step, setStep] = useState<number>(0);
 
-  const handleStep = useCallback(() => setStep((prev) => prev + 1), [setStep]);
+  const isSubmitting = fetcherRegister.state === "submitting";
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    trigger,
+    formState: { errors, isSubmitting: formIsSubmitting },
   } = useForm({
     resolver: zodResolver(registerFormSchema),
+    mode: "onChange"
   });
 
-  const handleFetcher = (data: any) => {
-    if (errors.email || errors.password) {
+  const handleStep = useCallback(async () => {
+    const isValid = await trigger(['name', 'email', 'phone']);
+    
+    if (!isValid) {
       return;
-    }
+    } 
+
+    setStep((prev) => prev + 1);
+
+  }, [trigger, errors, setStep]);
+
+  const handleFetcher = (data: any) => {
     fetcherRegister.submit(data, { method: "post", action: "/register" });
   };
 
@@ -38,7 +49,7 @@ export default function Register({ loaderData }: Route.ComponentProps) {
         <div className={styles.content + " " + styles.flexColumn}>
           <form
             method="post"
-            onSubmit={handleSubmit((data) => handleFetcher(data))}
+            onSubmit={handleSubmit(handleFetcher)}
           >
             <div
               className={`${styles.stepOne + " " + styles.flexColumn} ${step === 0 ? styles.isVisible : ""}`}
@@ -53,34 +64,34 @@ export default function Register({ loaderData }: Route.ComponentProps) {
                 id="name"
                 ariaLabel="Nome completo"
                 labelId="name"
-                description=""
                 label="Nome completo"
                 type="text"
                 placeholder="Digite o seu nome completo"
+                hasError={errors.name ? true : false}
+                handleClear={() => setValue("name", "")}
                 {...register("name")}
-                style={{ border: errors.name ? "1px solid red" : "" }}
               />
               <Input
                 id="email"
                 ariaLabel="E-mail"
                 labelId="email"
-                description=""
                 label="E-mail"
-                type="text"
+                type="email"
                 placeholder="Digite seu e-mail"
+                hasError={errors.email ? true : false}
+                handleClear={() => setValue("email", "")}
                 {...register("email")}
-                style={{ border: errors.email ? "1px solid red" : "" }}
               />
               <Input
                 id="phone"
                 ariaLabel="Celular"
                 labelId="phone"
-                description=""
                 label="Celular"
                 type="text"
                 placeholder="(XX) 9XXXX-XXXX"
+                hasError={errors.phone ? true : false}
+                handleClear={() => setValue("phone", "")}
                 {...register("phone")}
-                style={{ border: errors.phone ? "1px solid red" : "" }}
               />
               <div className={styles.buttonContainer + " " + styles.flexColumn}>
                 <Button
@@ -105,43 +116,76 @@ export default function Register({ loaderData }: Route.ComponentProps) {
                 id="cpf"
                 ariaLabel="Nome completo"
                 labelId="cpf"
-                description=""
                 label="CPF"
                 type="text"
                 placeholder="Digite seu CPF"
+                hasError={errors.cpf ? true : false}
+                handleClear={() => setValue("cpf", "")}
                 {...register("cpf")}
-                style={{ border: errors.cpf ? "1px solid red" : "" }}
               />
-              <p>Sexo</p>
-              <p>Data de nascimento</p>
+              <div className={styles.flexRow}>
+                <Select
+                  id="sex"
+                  label="Sexo"
+                  ariaLabel="Sexo"
+                  labelId="Sexo"
+                  options={[
+                    { value: "F", label: "Feminino" },
+                    { value: "M", label: "Masculino" },
+                  ]}
+                  {...register("sex")}
+                  variant="primary"
+                  size="medium"
+                />
+                <Input
+                  id="birthDate"
+                  type="date"
+                  ariaLabel="Birth Date"
+                  labelId="birthDate"
+                  label="Data de nascimento"
+                  placeholder="dd/mm/aaaa"
+                  height="42px"
+                  {...register("birthDate")}
+                />
+              </div>
               <Input
                 id="password"
                 ariaLabel="Senha"
                 labelId="password"
-                description=""
                 label="Senha"
                 type="password"
                 placeholder="Digite a sua senha"
+                hasError={errors.password ? true : false}
+                handleClear={() => setValue("password", "")}
                 {...register("password")}
-                style={{ border: errors.password ? "1px solid red" : "" }}
               />
-              <Text
-                align="left"
-                content={"A sua senha deve ter:"}
-                size="medium"
-                variant="secondary"
-              >
-                <ul>
+              <div>
+                <Text
+                  align="left"
+                  content={"A sua senha deve ter:"}
+                  size="medium"
+                  variant="secondary"
+                />
+                <ul className="textMedium fontSecondary">
                   <li>No mínimo 8 caracteres </li>
                   <li>Pelo menos 1 número </li>
                   <li>Pelo menos 1 letra maiúscula </li>
                   <li>Pelo menos 1 caractere especial (! @ # $ * ...)</li>
                 </ul>
-              </Text>
+              </div>
+              {fetcherRegister?.data?.error && (
+                <Text 
+                  content={fetcherRegister?.data?.error}
+                  variant="primary"
+                  size="small"
+                  align="left"
+                  color="var(--color-text-error)"
+                />
+              )}
               <div className={styles.buttonContainer + " " + styles.flexColumn}>
                 <Button
                   type="submit"
-                  label="Cadastrar"
+                  label={isSubmitting ? "Cadastrando..." : "Cadastrar"}
                   ariaLabel="Cadastrar"
                   variant="primary"
                 />

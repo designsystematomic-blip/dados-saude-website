@@ -3,7 +3,7 @@ import z from "zod/v4";
 const phoneRegex = /^(?:\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$/;
 
 export const registerFormSchema = z.object({
-  name: z.string().min(2, "O nome deve ter no mínimo  caracteres").max(100),
+  name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres").max(100),
   email: z.string().email("E-mail inválido."),
   phone: z.string().regex(phoneRegex, "Formato de telefone inválido"),
   cpf: z

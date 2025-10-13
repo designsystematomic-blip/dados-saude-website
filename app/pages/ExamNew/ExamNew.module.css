@@ -1,0 +1,21 @@
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.buttonContainer {
+  width: 100%;
+  justify-content: center;
+}
+
+.buttonContainer button {
+  align-self: center;
+}

@@ -62,8 +62,8 @@ export default function ForgotPassword({ loaderData }: Route.ComponentProps) {
               type="text"
               placeholder="Digite seu e-mail"
               {...register("email")}
-              style={{ border: errors.email ? "1px solid red" : "" }}
             />
+            {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
             <div className={styles.buttonContainer + " " + styles.flexColumn}>
               <Button
                 type="submit"

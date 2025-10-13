@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Route } from "../../routes/+types/login";
 import { Title, Wrapper, Input, Button, Text } from "dados-saude";
 import logoWithName from "../../assets/logoMedium.png";
@@ -12,32 +12,22 @@ import { RegisterText } from "~/components";
 
 export default function Login({ loaderData }: Route.ComponentProps) {
   const fetcherLogin = useFetcher({ key: "login" });
-  const [isDisabled, setIsDisabled] = useState(true);
-
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginFormSchema),
+    mode: "onChange"
   });
 
   const handleFetcher = (data: any) => {
-    console.log("erros", errors);
-    console.log("data", data);
-    console.log("erros", errors);
-
-    // Só envia se não houver erros
     if (Object.keys(errors).length > 0) {
       return;
     }
-
-    console.log("data", data);
-
     fetcherLogin.submit(data, { method: "post", action: "/login" });
   };
-
-  console.log("formstate", errors);
 
   return (
     <div className={styles.loginPage}>
@@ -65,8 +55,9 @@ export default function Login({ loaderData }: Route.ComponentProps) {
               label="E-mail"
               type="text"
               placeholder="Digite seu e-mail"
+              handleClear={() => setValue("email", "")}
+              hasError={errors.email ? true : false}
               {...register("email")}
-              style={{ border: errors.email ? "1px solid red" : "" }}
             />
             <div className={styles.passwordContainer + " " + styles.flexColumn}>
               <Input
@@ -77,8 +68,8 @@ export default function Login({ loaderData }: Route.ComponentProps) {
                 label="Senha"
                 type="password"
                 placeholder="Digite a sua senha"
+                handleClear={() => setValue("password", "")}
                 {...register("password")}
-                style={{ border: errors.password ? "1px solid red" : "" }}
               />
               <Link
                 to={"/forgot-password"}
@@ -89,6 +80,15 @@ export default function Login({ loaderData }: Route.ComponentProps) {
                 Esqueci a minha senha{" "}
               </Link>
             </div>
+            {fetcherLogin?.data?.error && (
+              <Text 
+                content={fetcherLogin?.data?.error}
+                variant="primary"
+                size="small"
+                align="left"
+                color="var(--color-text-error)"
+              />
+            )}
             <div className={styles.buttonContainer + " " + styles.flexColumn}>
               <Button
                 type="submit"
@@ -97,9 +97,9 @@ export default function Login({ loaderData }: Route.ComponentProps) {
                 variant="primary"
               />
             </div>
+            <RegisterText />
           </form>
 
-          <RegisterText />
         </div>
       </Wrapper>
     </div>

@@ -9,6 +9,13 @@
   gap: 24px;
 }
 
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
 .content {
   gap: 24px;
   margin-top: 30%;
