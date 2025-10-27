@@ -1,6 +1,7 @@
 import { redirect, type LoaderFunctionArgs } from "react-router";
 import type { Route } from "./+types/home";
 import authValidate from "~/handlers/auth.handler";
+import { ExamService } from "~/service/api";
 
 export { default } from "../pages/ExamNew";
 
@@ -11,21 +12,37 @@ export function meta({}: Route.MetaArgs) {
 	];
 }
 
+export async function action({ request }: LoaderFunctionArgs) {
+    const { token } = await authValidate({ request });
+    const formData = await request.formData();
+    const service = new ExamService(process.env.API_ENDPOINT!);
+    const response = await service.createExam({ 
+        data: formData,
+        token: token 
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        return { success: true, data: result };
+    }
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
 
-	const { hasSession, sessionDestroied, userData } = await authValidate({ request });
+	const { hasSession, isValidToken, sessionDestroied, userData } = await authValidate({ request });
 
 	if (!hasSession) {
 		return redirect("/login");
 	}
 
-	await sessionDestroied();
-
-	console.log('userData exam', userData)
+	if(!isValidToken && hasSession) {
+    return await sessionDestroied();
+  }
 
 	return {
 		meta: {
 			title: "Exame",
+			link: "/exam/new"
 		},
 		user: userData
 	};

@@ -1,9 +1,9 @@
 import { redirect } from "react-router";
 import { UserService } from "~/service/api";
-import { getSession } from "~/service/auth/auth.session";
-import { destroySession } from "~/sessions.server";
+import { destroySession, getSession } from "~/service/auth/auth.session";
 
 interface AuthValidateCallback {
+	token: string,
 	hasSession: boolean,
 	isValidToken: boolean,
 	sessionDestroied: () => void,
@@ -22,6 +22,7 @@ async function authValidate ({ request }: { request: any}): Promise<AuthValidate
 	const sessionDestroied = async () => {
 		if (userData?.error?.name === 'TokenExpiredError') {
       // Destrói a sessão
+			console.log('sessionDestroid')
       const headers = new Headers();
       headers.append("Set-Cookie", await destroySession(session));
       throw redirect("/login", { headers });
@@ -30,8 +31,9 @@ async function authValidate ({ request }: { request: any}): Promise<AuthValidate
 	}
 
 	return {
+		token,
 		hasSession,
-		isValidToken: userData?.error?.name === 'TokenExpiredError',
+		isValidToken: userData?.error?.name === 'TokenExpiredError' ? false : true,
 		sessionDestroied,
 		userData
 	}

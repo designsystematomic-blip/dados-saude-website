@@ -5,7 +5,7 @@ import styles from "./RegisterText.module.css";
 export default function RegisterText() {
   return (
     <div className={styles.register}>
-      <Text content="Você não tem uma conta?" size="medium" variant="primary" />
+      <Text content="Você não tem uma conta?" textSize="medium" fontFamily="primary" />
       <Link
         to={"/register"}
         className={styles.signUp + " " + "textMedium fontSecondary"}

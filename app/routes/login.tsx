@@ -3,9 +3,10 @@ import {
 } from "react-router";
 import type { Route } from "./+types/login";
 
-import Login from "../pages/Login/Login";
+import Login from "../pages/Login";
 import { commitSession, getSession } from "~/service/auth/auth.session";
 import { UserService } from "~/service/api";
+import authValidate from "~/handlers/auth.handler";
 
 export default Login;
 
@@ -51,11 +52,15 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const isLogged = session.has("token");
 
+  const { hasSession, isValidToken, sessionDestroied } = await authValidate({ request });
+
+  if(!isValidToken && hasSession) {
+    return await sessionDestroied();
+  }
+
   if (isLogged) {
     return redirect("/");
   }
-
-  console.log("login isLogged", isLogged);
 
   return { message: context.VALUE_FROM_EXPRESS };
 }

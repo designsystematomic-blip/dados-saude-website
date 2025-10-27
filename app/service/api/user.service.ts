@@ -52,6 +52,9 @@ export class UserService {
       },
       body: JSON.stringify({ email, password }),
     });
+
+    console.log('response', response)
+
     return response.json();
   }
 }

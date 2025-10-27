@@ -1,37 +1,30 @@
-import { Button, Text, Input, Select, Wrapper, Droplist, Textarea } from "dados-saude";
-import { useCallback, useEffect, useState } from "react";
-import { Link, useFetcher, useLoaderData, useNavigate } from "react-router";
+import { Button, Text, Input, Wrapper, Droplist, Textarea, UploadFile, Camera, Modal, IconUploadFile, Snackbar, Divider } from "dados-saude";
+import { useEffect } from "react";
+import { useFetcher, useLoaderData, useNavigate } from "react-router";
 import { useStore } from "~/contexts/StoreContext";
 import styles from './ExamNew.module.css';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { examNewFormSchema } from "~/zod/exam.schema";
+import useExamNew from "./hooks";
+import type { ExamType, Specialty } from "~/global/user";
 
 export default function ExamNew() {
 
-	const [selectedSpecialty, setSelectedSpecialty] = useState<{value: string | number; name: string}>();
-	const [selectedType, setSelectedType] = useState<{value: string | number; name: string}>();
-
-  const handleSelectSpecialty = useCallback((item: {value: string | number; name: string}) => {
-    setSelectedSpecialty(item)
-  }, [setSelectedSpecialty]);
-
-	const handleSelectType = useCallback((item: {value: string | number; name: string}) => {
-    setSelectedType(item)
-  }, [setSelectedType]);
-
 	const loader = useLoaderData();
+
 	const fetcherExam = useFetcher({ key: 'nex-exam' });
 	const { setPage, handleSetUser } = useStore();
 	const navigate = useNavigate();
+	const acceptedFileTypes = "image/*,application/pdf";
 
 	const { meta, user } = loader;
 
 	useEffect(() => {
-		const title = meta.title;
 		setPage(prev => ({
 			...prev,
-			title: title
+			title: meta.title,
+			link: meta.link
 		}));
 	}, [meta]);
 
@@ -43,6 +36,7 @@ export default function ExamNew() {
 		register,
 		handleSubmit,
 		setValue,
+		trigger,
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(examNewFormSchema),
@@ -50,11 +44,87 @@ export default function ExamNew() {
 	});
 
 	const handleFetcher = (data: any) => {
+
+		const form = new FormData();
+		form.append("name", data.name);
+		form.append("date", data.date);
+		form.append("type", data.type);
+		form.append("specialty", data.specialty);
+		form.append("observations", data.observations);
+		form.append("userId", user.id);
+
+		files.forEach((file) => {
+			form.append(`files`, file);
+		});
+
 		if (Object.keys(errors).length > 0) {
+			console.log('Errors encontrados:', errors);
 			return;
 		}
-		fetcherExam.submit(data, { method: "post", action: "/exam/new" });
+
+		fetcherExam.submit(form, { 
+			method: "post", 
+			action: "/exam/new",
+			encType: "multipart/form-data"
+		});
 	};
+
+	const {
+		files,
+		setFiles,
+		errorsFiles,
+		process,
+		setProcess,
+		handleTakePhotos,
+		handleChangeFiles,
+		handleFiles,
+		modalPreviewId,
+		modalCameraId,
+		multiDialog,
+		closeDialog,
+		selectedSpecialty,
+		selectedType,
+		handleSelectType,
+		handleSelectSpecialty,
+		snackBarSuccessId,
+		snackBarErrorId,
+		handleSnackBarSuccess,
+		handleSnackBarError,
+		examList,
+		specialtiesList
+	} = useExamNew();
+
+	useEffect(() => {
+		if (files.length > 0 && process === 100) {
+			handleSnackBarSuccess();
+		}
+		if (files.length > 0) {
+			setValue("files", files);
+		}
+	}, [files]);
+
+	useEffect(() => {
+		if (errorsFiles.length > 0) {
+			handleSnackBarError();
+		}
+	}, [errorsFiles]);
+
+	// Accessibility - Close modal on ESC key press
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape' && multiDialog.some((dialog) => dialog.id === modalPreviewId && dialog.isOpen)) {
+				closeDialog(modalPreviewId);
+			}
+		};
+
+		// Add event listener when component mounts or isOpen changes
+		document.addEventListener('keydown', handleKeyDown);
+
+		// Clean up event listener when component unmounts
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [multiDialog, closeDialog]);
 
 	return (
 		<div className={styles.page}>
@@ -64,6 +134,7 @@ export default function ExamNew() {
 						method="post"
 						className={styles.examNewContent + " " + styles.flexColumn}
 						onSubmit={handleSubmit(handleFetcher)}
+						encType="multipart/form-data"
 					>
 						<Input
 							id="name"
@@ -87,50 +158,221 @@ export default function ExamNew() {
 								label="Data do exame"
 								placeholder="xx/xx/xxxx"
 								height="42px"
+								hasError={errors.date ? true : false}
+								
 								{...register("date")}
 							/>
 
 							<Droplist
 								placeholder="Selecione"
-								handleSelectItem={handleSelectType}
+								handleSelectItem={async (item) => {
+									handleSelectType(item);
+									console.log('item', item);
+									setValue("type", item.value as ExamType);
+									await trigger("type");
+								}}
 								label="Tipo do exame"
 								name="Selecione"
 								listTitle="Tipo de exame"
-								list={[
-									{value: 1, name: 'Opção 1'},
-									{value: 2, name: 'Opção 2'},
-									{value: 3, name: 'Opção 3'},
-								]}
-								variant="secondary"
-								size="medium"
+								list={examList}
+								fontFamily="secondary"
+								textSize="medium"
+								hasError={errors.type ? true : false}
 							/>
 						</div>
 
 						<Droplist
 							placeholder="Selecione a especialidade"
-							handleSelectItem={handleSelectSpecialty}
+							handleSelectItem={async (item) => {
+								console.log('item', item);
+								handleSelectSpecialty(item);
+								setValue("specialty", item.value as Specialty);
+								await trigger("specialty");
+							}}
 							label="Especialidade (Opcional)"
 							name="Selectione o tipo"
 							listTitle="Especialidade"
-							list={[
-								{value: 1, name: 'Opção 1'},
-								{value: 2, name: 'Opção 2'},
-								{value: 3, name: 'Opção 3'},
-							]}
-							variant="secondary"
-							size="medium"
+							list={specialtiesList}
+							fontFamily="secondary"
+							textSize="medium"
+							hasError={errors.specialty ? true : false}
 						/>
 
-						<Wrapper style={{
-							border: '1px dashed var(--color-border-quartenary)',
-							width: '100%',
-							borderRadius: '20px',
-							padding: '24.5px'
-						}}>
+						<>
+							{multiDialog.some((dialog) => dialog.id === snackBarErrorId && dialog.isOpen) && (
+								<Snackbar
+									isOpen={errorsFiles.length > 0}
+									onClose={() => closeDialog(snackBarErrorId)}
+									type="error"
+									content={
+										<>
+											{errorsFiles.map((error) => (
+												<Text content={error} />
+											))}
+										</>
+									}
+								/>
+							)}
+							{multiDialog.some((dialog) => dialog.id === snackBarSuccessId && dialog.isOpen) && (
+								<Snackbar
+									type="success"
+									isOpen={files.length > 0 && process === 100}
+									onClose={() => closeDialog(snackBarSuccessId)}
+									content={`Upload de ${files.length} arquivo(s) realizado com sucesso!`}
+								/>
+							)}
+							<Wrapper style={{
+								border: '1px dashed var(--color-border-primary)',
+								borderRadius: '20px',
+								width: '100%',
+							}}>
+								<UploadFile.Root>
+									{files.length === 0 ? (
+										<Wrapper
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												justifyContent: 'center',
+												alignContent: 'center',
+												flexFlow: 'wrap',
+												gap: '8px',
+												padding: '16px',
+											}}
+										>
+											<UploadFile.Input
+												icon={<IconUploadFile fillColor="var(--button-bg-primary)" />}
+												label="Selecione as fotos da galeria"
+												name="file"
+												id="file"
+												accept={acceptedFileTypes}
+												acceptDescription="PNG, JPG ou PDF"
+												multiple
+												onChange={handleFiles}
+												buttonColor="var(--button-bg-primary)"
+												acceptDescriptionColor="var(--color-quintenary)"
+												filesList={files}
+												fontFamily="primary"
+											/>
+											<Divider
+												color="var(--color-border-primary)"
+												children={
+													<Text
+														content="ou"
+														fontFamily="secondary"
+														textColor="var(--color-border-primary)"
+														textSize="medium"
+													/>
+												}
+												borderLeft={true}
+												borderRight={true}
+											/>
+											<Button
+												variant="primary"
+												label="Tirar fotos"
+												type="button"
+												onClick={handleTakePhotos}
+											/>
+										</Wrapper>
+									) : (
+										<UploadFile.Root>
+											<UploadFile.State
+												uploadState={process === 100 ? 'success' : 'loading'}
+											/>
+											<UploadFile.LoadingBar
+												onChange={(progress) => setProcess(progress)}
+												showPercentage={true}
+												files={files}
+												loadingMessage="Carregando..."
+												loadedMessage="Carregamento completo"
+											/>
+											<Wrapper
+												style={{
+													display: 'flex',
+													gap: '4px',
+													justifyContent: 'center',
+													alignItems: 'center',
+													margin: '16px 0',
+												}}
+											>
+												<Button
+													variant="tertiary"
+													label="Trocar fotos"
+													type="button"
+													onClick={handleChangeFiles}
+												/>
+												<Text
+													fontFamily="secondary"
+													textSize="medium"
+													textColor="var(--color-quintenary)"
+													content="ou"
+												/>
+												<UploadFile.Input
+													label="Adicionar mais fotos"
+													name="Adicionar mais fotos"
+													id="add-more-files"
+													accept={acceptedFileTypes}
+													buttonColor="var(--bg-primary)"
+													textSize="medium"
+													onChange={handleFiles}
+													isDisabled={process !== 100}
+													fontFamily="primary"
+												/>
+											</Wrapper>
+										</UploadFile.Root>
+									)}
 
-							<p>Teste</p>
+									{multiDialog.some((dialog) => dialog.id === modalPreviewId && dialog.isOpen) && (
+										<Modal
+											id={modalPreviewId}
+											isOpen={multiDialog.some((dialog) => dialog.id === modalPreviewId && dialog.isOpen)}
+											onClose={() => closeDialog(modalPreviewId)}
+											width="large"
+											customClassName="round"
+										>
+											<UploadFile.Preview
+												title={`Pré-visualização dos arquivos (${files.length})`}
+												files={files}
+												onRemove={(file) =>
+													setFiles((prev) => prev.filter((f) => f.name !== file.name))
+												}
+												fontFamily="primary"
+												textSize="medium"
+											/>
+										</Modal>
+									)}
 
-						</Wrapper>
+									{multiDialog.some((dialog) => dialog.id === modalCameraId && dialog.isOpen) && (
+										<Modal
+											id={modalCameraId}
+											isOpen={multiDialog.some((dialog) => dialog.id === modalCameraId && dialog.isOpen)}
+											onClose={() => closeDialog(modalCameraId)}
+											width='large'
+										>
+											<Camera
+												buttonRetakePhotoText='Capturar novamente'
+												buttonTakePhotoText='Capturar foto'
+												mirrorText='Espelhar'
+												onCapture={(imageSrc) => {
+													// Convert base64 to File object
+													const byteString = atob(imageSrc.split(',')[1]);
+													const mimeString = imageSrc.split(',')[0].split(':')[1].split(';')[0];
+													const ab = new ArrayBuffer(byteString.length);
+													const ia = new Uint8Array(ab);
+													for (let i = 0; i < byteString.length; i++) {
+														ia[i] = byteString.charCodeAt(i);
+													}
+													const blob = new Blob([ab], { type: mimeString });
+													const file = new File([blob], `photo_${Date.now()}.jpg`, { type: mimeString });
+
+													setFiles((prev) => [...prev, file]);
+													closeDialog(modalCameraId);
+												}}
+											/>
+										</Modal>
+									)}
+								</UploadFile.Root>
+							</Wrapper>
+						</>
 
 						<Textarea
 							id="observations"
@@ -140,18 +382,18 @@ export default function ExamNew() {
 							placeholder="Dosagem, posologia etc"
 							height="96px"
 							resize={false}
-							variant="secondary"
-							size="medium"
+							fontFamily="secondary"
+							textSize="medium"
 							{...register("observations")}
 						/>
 
 						{fetcherExam?.data?.error && (
 							<Text
 								content={fetcherExam?.data?.error}
-								variant="primary"
-								size="small"
-								align="left"
-								color="var(--color-text-error)"
+								fontFamily="primary"
+								textSize="small"
+								textAlign="left"
+								textColor="var(--color-text-error)"
 							/>
 						)}
 						<div className={styles.buttonContainer + " " + styles.flexColumn}>

@@ -56,9 +56,9 @@ export default function Register({ loaderData }: Route.ComponentProps) {
             >
               <Title
                 tag="h1"
-                variant="primary"
+                fontFamily="primary"
                 content="Cadastre-se"
-                align="left"
+                textAlign="left"
               />
               <Input
                 id="name"
@@ -108,9 +108,9 @@ export default function Register({ loaderData }: Route.ComponentProps) {
             >
               <Title
                 tag="h1"
-                variant="primary"
+                fontFamily="primary"
                 content="Complete seu cadastro"
-                align="left"
+                textAlign="left"
               />
               <Input
                 id="cpf"
@@ -134,8 +134,8 @@ export default function Register({ loaderData }: Route.ComponentProps) {
                     { value: "M", label: "Masculino" },
                   ]}
                   {...register("sex")}
-                  variant="primary"
-                  size="medium"
+                  fontFamily="primary"
+                  textSize="medium"
                 />
                 <Input
                   id="birthDate"
@@ -161,10 +161,10 @@ export default function Register({ loaderData }: Route.ComponentProps) {
               />
               <div>
                 <Text
-                  align="left"
+                  textAlign="left"
                   content={"A sua senha deve ter:"}
-                  size="medium"
-                  variant="secondary"
+                  textSize="medium"
+                  fontFamily="secondary"
                 />
                 <ul className="textMedium fontSecondary">
                   <li>No mínimo 8 caracteres </li>
@@ -176,10 +176,10 @@ export default function Register({ loaderData }: Route.ComponentProps) {
               {fetcherRegister?.data?.error && (
                 <Text 
                   content={fetcherRegister?.data?.error}
-                  variant="primary"
-                  size="small"
-                  align="left"
-                  color="var(--color-text-error)"
+                  fontFamily="primary"
+                  textSize="small"
+                  textAlign="left"
+                  textColor="var(--color-text-error)"
                 />
               )}
               <div className={styles.buttonContainer + " " + styles.flexColumn}>
@@ -196,8 +196,8 @@ export default function Register({ loaderData }: Route.ComponentProps) {
             <div className={styles.bottomText}>
               <Text
                 content="Você já tem uma conta?"
-                size="medium"
-                variant="primary"
+                textSize="medium"
+                fontFamily="primary"
               />
               <Link
                 to={"/login"}
@@ -209,7 +209,7 @@ export default function Register({ loaderData }: Route.ComponentProps) {
           </div>
           <div className={styles.policyText}>
             <Text
-              align="center"
+              textAlign="center"
               content={""}
               children={
                 <>
@@ -229,8 +229,8 @@ export default function Register({ loaderData }: Route.ComponentProps) {
                   </Link>
                 </>
               }
-              size="medium"
-              variant="secondary"
+              textSize="medium"
+              fontFamily="secondary"
             />
           </div>
         </div>

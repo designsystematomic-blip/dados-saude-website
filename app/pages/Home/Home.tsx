@@ -14,10 +14,10 @@ export default function Home() {
 	const { meta, user } = loader;
 
 	useEffect(() => {
-		const title = meta.title;
 		setPage(prev => ({
 			...prev,
-			title: title
+			title: meta.title,
+			link: meta.link
 		}));
 	}, [meta]);
 
@@ -32,7 +32,7 @@ export default function Home() {
 					<CardAction  
 						label="Medicamentos"
 						icon={<IconMedication />}
-						variant="primary"
+						fontFamily="primary"
 						onClick={() => {
 							navigate('/medication')
 						}}
@@ -40,7 +40,7 @@ export default function Home() {
 					<CardAction 
 						label="Exames"
 						icon={<IconMedication />}
-						variant="primary"
+						fontFamily="primary"
 						onClick={() => {
 							navigate('/exam')
 						}}
@@ -48,7 +48,7 @@ export default function Home() {
 					<CardAction 
 						label="Vacinas"
 						icon={<IconVaccines />}
-						variant="primary"
+						fontFamily="primary"
 						onClick={() => {
 							navigate('/medication')
 						}}
@@ -56,7 +56,7 @@ export default function Home() {
 					<CardAction 
 						label="Médicos"
 						icon={<IconPeopleAlt />}
-						variant="primary"
+						fontFamily="primary"
 						onClick={() => {
 							navigate('/medication')
 						}}

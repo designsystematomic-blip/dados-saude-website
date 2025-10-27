@@ -42,15 +42,15 @@ export default function ForgotPassword({ loaderData }: Route.ComponentProps) {
           >
             <Title
               tag="h1"
-              variant="primary"
+              fontFamily="primary"
               content="Esqueci a minha senha"
-              align="left"
+              textAlign="left"
             />
             <div>
               <Text
                 content="Digite o seu e-mail cadastrado e em instantes vamos te enviar um link para que você possa criar uma nova senha."
-                variant="primary"
-                size="medium"
+                fontFamily="primary"
+                textSize="medium"
               />
             </div>
             <Input

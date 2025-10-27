@@ -11,6 +11,8 @@ export default function HeaderMount() {
 		setOpenMenuDrawer(!openMenuDrawer);
 	}, [openMenuDrawer]);
 
+	console.log('page', page)
+
 	console.log('user headermount', user);
 
 	if(!user) {
@@ -79,7 +81,9 @@ export default function HeaderMount() {
 						alt="Tulip Ion"
 					/>
 				</Link>
-				<Title tag="h2" content={page.title} variant="primary"/>
+				<a href={page.link} title={page.title} className={styles.headerTitle}>
+					<Title tag="h2" content={page.title} fontFamily="primary"/>
+				</a>
 				<Header.Action
 					onClick={handleOpenMenuDrawer}
 					icon={<IconHamburguer />}
@@ -107,15 +111,15 @@ export default function HeaderMount() {
 							<div>
 								<Text 
 									content={`Oi,`}
-									variant="primary"
-									size="large"
-									color="var(--button-text-primary)"
+									fontFamily="primary"
+									textSize="large"
+									textColor="var(--button-text-primary)"
 								/>
 								<Text 
 									content={`${user.name}`}
-									variant="primary"
-									size="large"
-									color="var(--button-text-primary)"
+									fontFamily="primary"
+									textSize="large"
+									textColor="var(--button-text-primary)"
 								/>
 							</div>
 						</div>

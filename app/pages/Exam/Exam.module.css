@@ -1,0 +1,23 @@
+.examHeaderActions {
+ 	display: flex;
+ 	gap: 1rem;
+ 	margin: 27px 0 32px;
+}
+
+.examHeaderActions button {
+	border-radius: 8px;
+}
+
+.examList {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.addExamButton {
+	margin-top: 48px;
+}
+
+.addExamButton button {
+	margin: 0 auto;
+}

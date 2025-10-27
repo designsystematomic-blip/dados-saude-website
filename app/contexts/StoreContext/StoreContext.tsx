@@ -4,9 +4,10 @@ import type { UserBasic, UserExtra } from '~/global/user';
 
 interface StoreContextType {
   page: {
-    title: string
+    title: string,
+    link: string
   };
-  setPage: React.Dispatch<React.SetStateAction<{ title: string }>>;
+  setPage: React.Dispatch<React.SetStateAction<{ title: string, link: string }>>;
   user: (UserBasic & UserExtra) | null,
   handleSetUser: (user: (UserBasic & UserExtra) | null) => void; 
 }
@@ -14,7 +15,7 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [page, setPage] = useState({ title: ''});
+  const [page, setPage] = useState({ title: '', link: '/' });
   const [user, setUser] = useState<(UserBasic & UserExtra) | null>(null);
 
   function handleSetUser (user: (UserBasic & UserExtra) | null) {

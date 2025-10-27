@@ -46,8 +46,8 @@ export const examNewFormSchema = z.object({
 	}),
 	type: z.enum(ExamType),
 	specialty: z.enum(Specialty).optional(),
-	file: z.file,
-	observations: z.string().min(2, "A descrição deve ter no mínimo 2 caracteres e no máximo 500").max(500).optional(),
+	files: z.array(z.file()),
+	observations: z.string().min(0).max(500).optional().or(z.literal("")),
 });
 
 export type UserLoginData = z.infer<typeof examNewFormSchema>;

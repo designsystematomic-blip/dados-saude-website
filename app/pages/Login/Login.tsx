@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import type { Route } from "../../routes/+types/login";
 import { Title, Wrapper, Input, Button, Text } from "dados-saude";
 import logoWithName from "../../assets/logoMedium.png";
@@ -43,9 +42,9 @@ export default function Login({ loaderData }: Route.ComponentProps) {
           >
             <Title
               tag="h1"
-              variant="primary"
+              fontFamily="primary"
               content="Entre na sua conta"
-              align="left"
+              textAlign="left"
             />
             <Input
               id="email"
@@ -83,10 +82,10 @@ export default function Login({ loaderData }: Route.ComponentProps) {
             {fetcherLogin?.data?.error && (
               <Text 
                 content={fetcherLogin?.data?.error}
-                variant="primary"
-                size="small"
-                align="left"
-                color="var(--color-text-error)"
+                fontFamily="primary"
+                textSize="small"
+                textAlign="left"
+                textColor="var(--color-text-error)"
               />
             )}
             <div className={styles.buttonContainer + " " + styles.flexColumn}>
