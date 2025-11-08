@@ -1,0 +1,8 @@
+import type { {{pascalCase part}}Props } from './{{pascalCase part}}.types';
+import styles from './{{pascalCase part}}.module.css';
+
+const {{pascalCase part}} = ({ children }:{{pascalCase part}}Props) => {
+  return <div className={styles.container}>{children}</div>;
+};
+
+export default {{pascalCase part}};

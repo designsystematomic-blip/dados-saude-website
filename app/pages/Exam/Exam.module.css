@@ -1,3 +1,4 @@
+/* Estilos para listagem de exames */
 .examHeaderActions {
  	display: flex;
  	gap: 1rem;
@@ -20,4 +21,313 @@
 
 .addExamButton button {
 	margin: 0 auto;
+}
+
+/* Estilos para detalhes do exame */
+.examContainer {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 0 16px;
+}
+
+.examHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 32px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.examHeaderInfo {
+	flex: 1;
+}
+
+.examHeaderActions {
+	display: flex;
+	gap: 12px;
+	margin: 0;
+}
+
+.examHeaderActions button {
+	border-radius: 8px;
+	white-space: nowrap;
+}
+
+.examDetails {
+	display: flex;
+	flex-direction: column;
+}
+
+.examInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.examInfoRow {
+	display: flex;
+	gap: 32px;
+	flex-wrap: wrap;
+}
+
+.examInfoItem {
+	flex: 1;
+	min-width: 250px;
+}
+
+.examInfoItem h4 {
+	margin: 0 0 4px 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.examInfoItem p {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+/* Estilos para lista de arquivos */
+.filesList {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.fileItem {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px;
+	background-color: var(--color-background-secondary);
+	border-radius: 8px;
+	border: 1px solid var(--color-border-primary);
+}
+
+.fileInfo {
+	flex: 1;
+}
+
+.fileInfo h5 {
+	margin: 0 0 4px 0;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.fileInfo small {
+	margin: 0;
+	font-size: 12px;
+}
+
+.fileActions {
+	display: flex;
+	gap: 8px;
+}
+
+.fileActions button {
+	border-radius: 6px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+	.examContainer {
+		padding: 0 12px;
+	}
+
+	.examHeader {
+		flex-direction: column;
+		gap: 16px;
+		align-items: stretch;
+	}
+
+	.examHeaderActions {
+		justify-content: stretch;
+	}
+
+	.examHeaderActions button {
+		flex: 1;
+	}
+
+	.examInfoRow {
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.examInfoItem {
+		min-width: auto;
+	}
+
+	.fileItem {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+	}
+
+	.fileActions {
+		justify-content: stretch;
+	}
+
+	.fileActions button {
+		flex: 1;
+	}
+}
+
+/* Estilos para preview de arquivos */
+.filePreview {
+	margin-top: 12px;
+}
+
+.thumbnailImage {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border-radius: 8px;
+	border: 2px solid var(--color-border-primary);
+	cursor: pointer;
+	transition: transform 0.2s, border-color 0.2s;
+}
+
+.thumbnailImage:hover {
+	transform: scale(1.05);
+	border-color: var(--color-primary);
+}
+
+.pdfThumbnail {
+	width: 60px;
+	height: 60px;
+	border-radius: 8px;
+	border: 2px solid var(--color-border-primary);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-background-tertiary);
+	transition: transform 0.2s, border-color 0.2s;
+	text-align: center;
+	padding: 8px;
+}
+
+.pdfThumbnail:hover {
+	transform: scale(1.05);
+	border-color: var(--color-primary);
+}
+
+/* Estilos para modal */
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	padding: 20px;
+}
+
+.modalContent {
+	background-color: var(--color-background-primary);
+	border-radius: 16px;
+	max-width: 90vw;
+	max-height: 90vh;
+	width: 800px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modalHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 24px;
+	border-bottom: 1px solid var(--color-border-primary);
+}
+
+.modalHeader h3 {
+	margin: 0;
+	flex: 1;
+}
+
+.modalBody {
+	padding: 24px;
+	flex: 1;
+	overflow: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 400px;
+}
+
+.modalImage {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	border-radius: 8px;
+}
+
+.modalPdf {
+	width: 100%;
+	height: 500px;
+	border: none;
+	border-radius: 8px;
+}
+
+.modalFooter {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+	padding: 20px 24px;
+	border-top: 1px solid var(--color-border-primary);
+}
+
+.modalFooter button {
+	border-radius: 8px;
+}
+
+/* Responsividade para modal */
+@media (max-width: 768px) {
+	.modal {
+		padding: 10px;
+	}
+
+	.modalContent {
+		width: 100%;
+		max-height: 95vh;
+	}
+
+	.modalHeader {
+		padding: 16px 20px;
+	}
+
+	.modalBody {
+		padding: 20px;
+		min-height: 300px;
+	}
+
+	.modalPdf {
+		height: 400px;
+	}
+
+	.modalFooter {
+		padding: 16px 20px;
+		flex-direction: column;
+	}
+
+	.modalFooter button {
+		flex: 1;
+	}
+
+	.filePreview {
+		margin-top: 8px;
+	}
+
+	.thumbnailImage,
+	.pdfThumbnail {
+		width: 50px;
+		height: 50px;
+	}
 }

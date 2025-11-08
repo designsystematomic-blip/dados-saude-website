@@ -7,5 +7,6 @@ export default [
   route("forgot-password", "routes/forgot-password.tsx"),
   route("register", "routes/register.tsx"),
   route("exam", "routes/exam.tsx"),
+  route('exam/:id', 'routes/exam.$id.tsx'),
   route("exam/new", "routes/exam.new.tsx"),
 ] satisfies RouteConfig;

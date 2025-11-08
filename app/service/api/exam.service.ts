@@ -32,12 +32,7 @@ export class ExamService {
 			filter.name ? { name: filter.name } : {}
 		).toString();
 
-		console.log('queryString', queryString)
-
 		const url = queryString ? `${this.endpoint}/exams/user/${userId}?${queryString}` : `${this.endpoint}/exams/user/${userId}`;
-
-		console.log('url', url)
-
 		const response = await fetch(url, {
 			method: "GET",
 			headers: {
@@ -46,5 +41,34 @@ export class ExamService {
 		});
 
 		return response;
+	}
+
+	async getExamById({ token, userId, examId }: { token: string; userId: string; examId: string; }): Promise<Response> {
+
+		const response = await fetch(`${this.endpoint}/exams/${examId}`, {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"x-user-id": userId
+			}
+		});
+
+		return response;
+	}
+
+	async getFileDownloadUrl({ token, fileId }: { token: string; fileId: string; }): Promise<Response> {
+
+		const response = await fetch(`${this.endpoint}/exams/file/${fileId}/download`, {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		});
+
+		return response;
+	}
+
+	getFileStreamUrl({ fileId, token }: { fileId: string; token: string; }): string {
+		return `${this.endpoint}/exams/file/${fileId}/stream?token=${encodeURIComponent(token)}`;
 	}
 }

@@ -11,10 +11,6 @@ export default function HeaderMount() {
 		setOpenMenuDrawer(!openMenuDrawer);
 	}, [openMenuDrawer]);
 
-	console.log('page', page)
-
-	console.log('user headermount', user);
-
 	if(!user) {
 		return;
 	}
@@ -22,51 +18,84 @@ export default function HeaderMount() {
 	const menuItems: any[] = [
 		{
 			iconLeft: <IconAccount fillColor="#0476D9"/>,
-			name: 'Dados pessoais',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			textAlign: 'left',
+			children: (
+				<a href="/profile" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Dados pessoais" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconMedicalInformation/>,
-			name: 'Dados médicos',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/medical-data" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Dados médicos" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconContactPeople/>,
-			name: 'Contatos de emergência',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/emergency-contacts" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Contatos de emergência" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconFeed/>,
-			name: 'Exames',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/exam" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Exames" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconPeopleAlt/>,
-			name: 'Médicos',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/doctors" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Médicos" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconMedication/>,
-			name: 'Medicamentos',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/medications" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Medicamentos" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconVaccines/>,
-			name: 'Vacinas',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/vaccines" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Vacinas" fontFamily="primary" />
+				</a>
+			)
 		},
 		{
 			iconLeft: <IconHelpOutline/>,
-			name: 'Ajuda',
 			iconRight: <IconChevronRight />,
-			variant: 'secondary'
+			variant: 'secondary',
+			children: (
+				<a href="/help" className={styles.menuLink}>
+					<Title tag="span" textAlign="left" content="Ajuda" fontFamily="primary" />
+				</a>
+			)
 		}
 	];
 
@@ -135,7 +164,7 @@ export default function HeaderMount() {
 					<div className={styles.drawerMenuItems}>
 						<Menu.List direction='column'>
 							{menuItems.map((item, index) => (
-								<Menu.Item key={index} {...item} />
+								<Menu.Item fontFamily="primary" key={index} {...item} />
 							))}
 						</Menu.List>
 					</div>
