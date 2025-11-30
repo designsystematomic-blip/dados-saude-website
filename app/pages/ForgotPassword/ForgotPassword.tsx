@@ -1,9 +1,9 @@
 import type { Route } from "../../routes/+types/login";
-import { Title, Wrapper, Input, Button, Text } from "dados-saude";
+import { Title, Wrapper, Input, Button, Text } from "design-system-atomic";
 import logoWithName from "../../assets/logoMedium.png";
 
 import styles from "./ForgotPassword.module.css";
-import { Link, useFetcher } from "react-router";
+import { useFetcher } from "react-router";
 import { useForm } from "react-hook-form";
 import { loginFormSchema } from "~/zod/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -63,7 +63,9 @@ export default function ForgotPassword({ loaderData }: Route.ComponentProps) {
               placeholder="Digite seu e-mail"
               {...register("email")}
             />
-            {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
+            {errors.email && (
+              <span style={{ color: "red" }}>{errors.email.message}</span>
+            )}
             <div className={styles.buttonContainer + " " + styles.flexColumn}>
               <Button
                 type="submit"

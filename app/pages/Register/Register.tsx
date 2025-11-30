@@ -1,5 +1,12 @@
 import type { Route } from "../../routes/+types/register";
-import { Title, Wrapper, Input, Button, Text, Select } from "dados-saude";
+import {
+  Title,
+  Wrapper,
+  Input,
+  Button,
+  Text,
+  Select,
+} from "design-system-atomic";
 
 import styles from "./Register.module.css";
 import { Link, useFetcher } from "react-router";
@@ -24,18 +31,17 @@ export default function Register({ loaderData }: Route.ComponentProps) {
     formState: { errors, isSubmitting: formIsSubmitting },
   } = useForm({
     resolver: zodResolver(registerFormSchema),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const handleStep = useCallback(async () => {
-    const isValid = await trigger(['name', 'email', 'phone']);
-    
+    const isValid = await trigger(["name", "email", "phone"]);
+
     if (!isValid) {
       return;
-    } 
+    }
 
     setStep((prev) => prev + 1);
-
   }, [trigger, errors, setStep]);
 
   const handleFetcher = (data: any) => {
@@ -47,10 +53,7 @@ export default function Register({ loaderData }: Route.ComponentProps) {
       <Wrapper>
         <Logo />
         <div className={styles.content + " " + styles.flexColumn}>
-          <form
-            method="post"
-            onSubmit={handleSubmit(handleFetcher)}
-          >
+          <form method="post" onSubmit={handleSubmit(handleFetcher)}>
             <div
               className={`${styles.stepOne + " " + styles.flexColumn} ${step === 0 ? styles.isVisible : ""}`}
             >
@@ -174,7 +177,7 @@ export default function Register({ loaderData }: Route.ComponentProps) {
                 </ul>
               </div>
               {fetcherRegister?.data?.error && (
-                <Text 
+                <Text
                   content={fetcherRegister?.data?.error}
                   fontFamily="primary"
                   textSize="small"

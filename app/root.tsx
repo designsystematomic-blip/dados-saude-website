@@ -9,7 +9,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import "dados-saude/styles/style.css";
+import "design-system-atomic/styles/style.css";
 import { StoreProvider } from "./contexts/StoreContext";
 import { HeaderMount } from "./components";
 

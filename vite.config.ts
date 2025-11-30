@@ -4,6 +4,12 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  optimizeDeps: {
+    include: ["design-system-atomic"],
+  },
+  ssr: {
+    noExternal: ["design-system-atomic"],
+  },
   plugins: [reactRouter(), tsconfigPaths()],
   server: {
     fs: {
@@ -14,11 +20,11 @@ export default defineConfig({
       // Você também pode adicionar outros hosts se necessário:
       "localhost",
       ".trycloudflare.com", // Permite qualquer subdomínio do trycloudflare.com
-    ]
+    ],
   },
   resolve: {
     alias: {
-      '~': resolve(__dirname, './app')
-    }
-  }
+      "~": resolve(__dirname, "./app"),
+    },
+  },
 });

@@ -11,7 +11,7 @@ export default function Route404() {
 
         <div>
           <button type="button" onClick={() => navigate(-1)}>
-            Go Back
+            Voltar
           </button>
           <Link to={to}>Ir para home</Link>
         </div>

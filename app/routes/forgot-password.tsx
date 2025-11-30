@@ -14,8 +14,6 @@ export function meta({}: Route.MetaArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  //   const email = formData.get("email");
-  //   const password = hash("sha256", formData.get("password"));
 
   return null;
 }

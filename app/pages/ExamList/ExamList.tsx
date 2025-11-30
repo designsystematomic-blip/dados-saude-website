@@ -1,11 +1,21 @@
-import { Button, Card, EmptyState, IconDocumentEmptyFolder, IconFilter, IconPlus, Input, Title, Wrapper } from "dados-saude";
+import {
+  Button,
+  Card,
+  EmptyState,
+  IconDocumentEmptyFolder,
+  IconFilter,
+  IconPlus,
+  Input,
+  Title,
+  Wrapper,
+} from "design-system-atomic";
 import { useCallback, useEffect, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 import { useStore } from "~/contexts/StoreContext";
 import styles from "./ExamList.module.css";
 
 export default function ExamList() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const loader = useLoaderData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,10 +25,10 @@ export default function ExamList() {
   const { meta, user, exams } = loader;
 
   useEffect(() => {
-    setPage(prev => ({
+    setPage((prev) => ({
       ...prev,
       title: meta.title,
-      link: meta.link
+      link: meta.link,
     }));
   }, [meta]);
 
@@ -26,20 +36,23 @@ export default function ExamList() {
     handleSetUser(user);
   }, [user]);
 
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    setSearch(target.value);
-    setSearchParams({ name: target.value });
-    if (target.value == '' && searchParams.has('name')) {
-      searchParams.delete('name');
-      return;
-    }
-  }, [setSearch, setSearchParams, searchParams]);
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const target = e.target as HTMLInputElement;
+      setSearch(target.value);
+      setSearchParams({ name: target.value });
+      if (target.value == "" && searchParams.has("name")) {
+        searchParams.delete("name");
+        return;
+      }
+    },
+    [setSearch, setSearchParams, searchParams]
+  );
 
   return (
     <Wrapper>
-      {exams.length < 1 && searchParams.has('name') === false ? (
-        <Wrapper style={{ marginTop: '80px' }}>
+      {exams.length < 1 && searchParams.has("name") === false ? (
+        <Wrapper style={{ marginTop: "80px" }}>
           <EmptyState.Root>
             <IconDocumentEmptyFolder />
             <Title
@@ -51,20 +64,24 @@ export default function ExamList() {
             />
             <EmptyState.Action>
               <Button
-                iconRight={<IconPlus fillColor={'var(--button-text-primary)'} />}
+                iconRight={
+                  <IconPlus fillColor={"var(--button-text-primary)"} />
+                }
                 type="button"
                 variant="primary"
                 label="Adicionar novo exame"
-                onClick={() => navigate('/exam/new')}
+                onClick={() => navigate("/exam/new")}
               />
             </EmptyState.Action>
           </EmptyState.Root>
         </Wrapper>
       ) : (
-        <Wrapper style={{
-          height: '100vh',
-          padding: 0
-        }}>
+        <Wrapper
+          style={{
+            height: "100vh",
+            padding: 0,
+          }}
+        >
           <div className={styles.examHeaderActions}>
             <Input
               id="searchExam"
@@ -74,7 +91,9 @@ export default function ExamList() {
               type="text"
               placeholder="Pesquise..."
               showLabel={false}
-              handleClear={() => { setSearch('') }}
+              handleClear={() => {
+                setSearch("");
+              }}
               onChange={handleSearchChange}
             />
             <Button
@@ -85,21 +104,21 @@ export default function ExamList() {
               iconRight={<IconFilter fillColor="var(--bg-primary)" />}
             />
           </div>
-          {searchParams.has('name') && search !== "" && (
+          {searchParams.has("name") && search !== "" && (
             <Wrapper
               style={{
                 padding: 0,
-                display: 'flex',
-                gap: '16px',
-                marginBottom: '8px',
-                flexWrap: 'wrap'
+                display: "flex",
+                gap: "16px",
+                marginBottom: "8px",
+                flexWrap: "wrap",
               }}
             >
               <div>
                 <Title
                   tag="span"
                   fontFamily="primary"
-                  content={`Filtrando por: "${searchParams.get('name')}"`}
+                  content={`Filtrando por: "${searchParams.get("name")}"`}
                   textAlign="left"
                 />
                 <Button
@@ -110,12 +129,17 @@ export default function ExamList() {
                   textAlign="center"
                   onClick={() => {
                     setSearchParams({});
-                    setSearch('');
+                    setSearch("");
                   }}
                 />
               </div>
               {exams.length < 1 && (
-                <Title tag="h3" fontFamily="primary" textAlign="center" content="Nenhum exame encontrado" />
+                <Title
+                  tag="h3"
+                  fontFamily="primary"
+                  textAlign="center"
+                  content="Nenhum exame encontrado"
+                />
               )}
             </Wrapper>
           )}
@@ -125,34 +149,34 @@ export default function ExamList() {
                 key={exam.id}
                 title={exam.name}
                 titleColor="var(--color-link-secondary)"
-                subtitle={`${new Date(exam.date).toLocaleDateString('pt-BR')}`}
+                subtitle={`${new Date(exam.date).toLocaleDateString("pt-BR")}`}
                 subtitleColor="var(--color-link-tertiary)"
                 link={{
-                  text: 'Editar',
-                  textColor: 'var(--color-link-secondary)',
-                  href: `/exam/${exam.id}`
+                  text: "Editar",
+                  textColor: "var(--color-link-secondary)",
+                  href: `/exam/${exam.id}`,
                 }}
                 fontFamily="primary"
                 textSize="medium"
                 style={{
-                  padding: '12px',
-                  borderRadius: '8px',
-                  boxShadow: '0px -1px 20px #0000001a'
+                  padding: "12px",
+                  borderRadius: "8px",
+                  boxShadow: "0px -1px 20px #0000001a",
                 }}
               />
             ))}
           </div>
           <div className={styles.addExamButton}>
             <Button
-              iconRight={<IconPlus fillColor={'var(--button-text-primary)'} />}
+              iconRight={<IconPlus fillColor={"var(--button-text-primary)"} />}
               type="button"
               variant="primary"
               label="Adicionar novo exame"
-              onClick={() => navigate('/exam/new')}
+              onClick={() => navigate("/exam/new")}
             />
           </div>
         </Wrapper>
       )}
     </Wrapper>
-  )
+  );
 }

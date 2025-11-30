@@ -1,8 +1,21 @@
-import { Button, Text, Input, Wrapper, Droplist, Textarea, UploadFile, Camera, Modal, IconUploadFile, Snackbar, Divider } from "dados-saude";
+import {
+  Button,
+  Text,
+  Input,
+  Wrapper,
+  Droplist,
+  Textarea,
+  UploadFile,
+  Camera,
+  Modal,
+  IconUploadFile,
+  Snackbar,
+  Divider,
+} from "design-system-atomic";
 import { useEffect } from "react";
 import { useFetcher, useLoaderData, useNavigate } from "react-router";
 import { useStore } from "~/contexts/StoreContext";
-import styles from './ExamNew.module.css';
+import styles from "./ExamNew.module.css";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { examNewFormSchema } from "~/zod/exam.schema";
@@ -10,404 +23,435 @@ import useExamNew from "./hooks";
 import type { ExamType, Specialty } from "~/global/user";
 
 export default function ExamNew() {
+  const loader = useLoaderData();
 
-	const loader = useLoaderData();
+  const fetcherExam = useFetcher({ key: "nex-exam" });
+  const { setPage, handleSetUser } = useStore();
+  const navigate = useNavigate();
+  const acceptedFileTypes = "image/*,application/pdf";
 
-	const fetcherExam = useFetcher({ key: 'nex-exam' });
-	const { setPage, handleSetUser } = useStore();
-	const navigate = useNavigate();
-	const acceptedFileTypes = "image/*,application/pdf";
+  const { meta, user } = loader;
 
-	const { meta, user } = loader;
+  useEffect(() => {
+    setPage((prev) => ({
+      ...prev,
+      title: meta.title,
+      link: meta.link,
+    }));
+  }, [meta]);
 
-	useEffect(() => {
-		setPage(prev => ({
-			...prev,
-			title: meta.title,
-			link: meta.link
-		}));
-	}, [meta]);
+  useEffect(() => {
+    handleSetUser(user);
+  }, [user]);
 
-	useEffect(() => {
-		handleSetUser(user);
-	}, [user]);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(examNewFormSchema),
+    mode: "onChange",
+  });
 
-	const {
-		register,
-		handleSubmit,
-		setValue,
-		trigger,
-		formState: { errors },
-	} = useForm({
-		resolver: zodResolver(examNewFormSchema),
-		mode: "onChange"
-	});
+  const handleFetcher = (data: any) => {
+    const form = new FormData();
+    form.append("name", data.name);
+    form.append("date", data.date);
+    form.append("type", data.type);
+    form.append("specialty", data.specialty);
+    form.append("observations", data.observations);
+    form.append("userId", user.id);
 
-	const handleFetcher = (data: any) => {
+    files.forEach((file) => {
+      form.append(`files`, file);
+    });
 
-		const form = new FormData();
-		form.append("name", data.name);
-		form.append("date", data.date);
-		form.append("type", data.type);
-		form.append("specialty", data.specialty);
-		form.append("observations", data.observations);
-		form.append("userId", user.id);
+    if (Object.keys(errors).length > 0) {
+      console.log("Errors encontrados:", errors);
+      return;
+    }
 
-		files.forEach((file) => {
-			form.append(`files`, file);
-		});
+    fetcherExam.submit(form, {
+      method: "post",
+      action: "/exam/new",
+      encType: "multipart/form-data",
+    });
+  };
 
-		if (Object.keys(errors).length > 0) {
-			console.log('Errors encontrados:', errors);
-			return;
-		}
+  const {
+    files,
+    setFiles,
+    errorsFiles,
+    process,
+    setProcess,
+    handleTakePhotos,
+    handleChangeFiles,
+    handleFiles,
+    modalPreviewId,
+    modalCameraId,
+    multiDialog,
+    closeDialog,
+    selectedSpecialty,
+    selectedType,
+    handleSelectType,
+    handleSelectSpecialty,
+    snackBarSuccessId,
+    snackBarErrorId,
+    handleSnackBarSuccess,
+    handleSnackBarError,
+    examList,
+    specialtiesList,
+  } = useExamNew();
 
-		fetcherExam.submit(form, { 
-			method: "post", 
-			action: "/exam/new",
-			encType: "multipart/form-data"
-		});
-	};
+  useEffect(() => {
+    if (files.length > 0 && process === 100) {
+      handleSnackBarSuccess();
+    }
+    if (files.length > 0) {
+      setValue("files", files);
+    }
+  }, [files]);
 
-	const {
-		files,
-		setFiles,
-		errorsFiles,
-		process,
-		setProcess,
-		handleTakePhotos,
-		handleChangeFiles,
-		handleFiles,
-		modalPreviewId,
-		modalCameraId,
-		multiDialog,
-		closeDialog,
-		selectedSpecialty,
-		selectedType,
-		handleSelectType,
-		handleSelectSpecialty,
-		snackBarSuccessId,
-		snackBarErrorId,
-		handleSnackBarSuccess,
-		handleSnackBarError,
-		examList,
-		specialtiesList
-	} = useExamNew();
+  useEffect(() => {
+    if (errorsFiles.length > 0) {
+      handleSnackBarError();
+    }
+  }, [errorsFiles]);
 
-	useEffect(() => {
-		if (files.length > 0 && process === 100) {
-			handleSnackBarSuccess();
-		}
-		if (files.length > 0) {
-			setValue("files", files);
-		}
-	}, [files]);
+  // Accessibility - Close modal on ESC key press
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === "Escape" &&
+        multiDialog.some(
+          (dialog: any) => dialog.id === modalPreviewId && dialog.isOpen
+        )
+      ) {
+        closeDialog(modalPreviewId);
+      }
+    };
 
-	useEffect(() => {
-		if (errorsFiles.length > 0) {
-			handleSnackBarError();
-		}
-	}, [errorsFiles]);
+    // Add event listener when component mounts or isOpen changes
+    document.addEventListener("keydown", handleKeyDown);
 
-	// Accessibility - Close modal on ESC key press
-	useEffect(() => {
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape' && multiDialog.some((dialog) => dialog.id === modalPreviewId && dialog.isOpen)) {
-				closeDialog(modalPreviewId);
-			}
-		};
+    // Clean up event listener when component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [multiDialog, closeDialog]);
 
-		// Add event listener when component mounts or isOpen changes
-		document.addEventListener('keydown', handleKeyDown);
+  return (
+    <div className={styles.page}>
+      <Wrapper style={{ marginTop: "24px" }}>
+        <div>
+          <form
+            method="post"
+            className={styles.examNewContent + " " + styles.flexColumn}
+            onSubmit={handleSubmit(handleFetcher)}
+            encType="multipart/form-data"
+          >
+            <Input
+              id="name"
+              ariaLabel="Nome"
+              labelId="name"
+              description=""
+              label="Nome"
+              type="text"
+              placeholder="Ex. “Hemograma completo”, “Ressonância”"
+              handleClear={() => setValue("name", "")}
+              hasError={errors.name ? true : false}
+              {...register("name")}
+            />
 
-		// Clean up event listener when component unmounts
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
-		};
-	}, [multiDialog, closeDialog]);
+            <div className={styles.flexRow}>
+              <Input
+                id="date"
+                type="date"
+                ariaLabel="Birth Date"
+                labelId="date"
+                label="Data do exame"
+                placeholder="xx/xx/xxxx"
+                height="42px"
+                hasError={errors.date ? true : false}
+                {...register("date")}
+              />
 
-	return (
-		<div className={styles.page}>
-			<Wrapper style={{ marginTop: '24px' }}>
-				<div>
-					<form
-						method="post"
-						className={styles.examNewContent + " " + styles.flexColumn}
-						onSubmit={handleSubmit(handleFetcher)}
-						encType="multipart/form-data"
-					>
-						<Input
-							id="name"
-							ariaLabel="Nome"
-							labelId="name"
-							description=""
-							label="Nome"
-							type="text"
-							placeholder="Ex. “Hemograma completo”, “Ressonância”"
-							handleClear={() => setValue("name", "")}
-							hasError={errors.name ? true : false}
-							{...register("name")}
-						/>
+              <Droplist
+                placeholder="Selecione"
+                handleSelectItem={async (item) => {
+                  handleSelectType(item);
+                  console.log("item", item);
+                  setValue("type", item.value as ExamType);
+                  await trigger("type");
+                }}
+                label="Tipo do exame"
+                name="Selecione"
+                listTitle="Tipo de exame"
+                list={examList}
+                fontFamily="secondary"
+                textSize="medium"
+                hasError={errors.type ? true : false}
+              />
+            </div>
 
-						<div className={styles.flexRow}>
-							<Input
-								id="date"
-								type="date"
-								ariaLabel="Birth Date"
-								labelId="date"
-								label="Data do exame"
-								placeholder="xx/xx/xxxx"
-								height="42px"
-								hasError={errors.date ? true : false}
-								
-								{...register("date")}
-							/>
+            <Droplist
+              placeholder="Selecione a especialidade"
+              handleSelectItem={async (item) => {
+                console.log("item", item);
+                handleSelectSpecialty(item);
+                setValue("specialty", item.value as Specialty);
+                await trigger("specialty");
+              }}
+              label="Especialidade (Opcional)"
+              name="Selectione o tipo"
+              listTitle="Especialidade"
+              list={specialtiesList}
+              fontFamily="secondary"
+              textSize="medium"
+              hasError={errors.specialty ? true : false}
+            />
 
-							<Droplist
-								placeholder="Selecione"
-								handleSelectItem={async (item) => {
-									handleSelectType(item);
-									console.log('item', item);
-									setValue("type", item.value as ExamType);
-									await trigger("type");
-								}}
-								label="Tipo do exame"
-								name="Selecione"
-								listTitle="Tipo de exame"
-								list={examList}
-								fontFamily="secondary"
-								textSize="medium"
-								hasError={errors.type ? true : false}
-							/>
-						</div>
+            <>
+              {multiDialog.some(
+                (dialog: any) => dialog.id === snackBarErrorId && dialog.isOpen
+              ) && (
+                <Snackbar
+                  isOpen={errorsFiles.length > 0}
+                  onClose={() => closeDialog(snackBarErrorId)}
+                  type="error"
+                  content={
+                    <>
+                      {errorsFiles.map((error) => (
+                        <Text content={error} />
+                      ))}
+                    </>
+                  }
+                />
+              )}
+              {multiDialog.some(
+                (dialog: any) =>
+                  dialog.id === snackBarSuccessId && dialog.isOpen
+              ) && (
+                <Snackbar
+                  type="success"
+                  isOpen={files.length > 0 && process === 100}
+                  onClose={() => closeDialog(snackBarSuccessId)}
+                  content={`Upload de ${files.length} arquivo(s) realizado com sucesso!`}
+                />
+              )}
+              <Wrapper
+                style={{
+                  border: "1px dashed var(--color-border-primary)",
+                  borderRadius: "20px",
+                  width: "100%",
+                }}
+              >
+                <UploadFile.Root>
+                  {files.length === 0 ? (
+                    <Wrapper
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        flexFlow: "wrap",
+                        gap: "8px",
+                        padding: "16px",
+                      }}
+                    >
+                      <UploadFile.Input
+                        icon={
+                          <IconUploadFile fillColor="var(--button-bg-primary)" />
+                        }
+                        label="Selecione as fotos da galeria"
+                        name="file"
+                        id="file"
+                        accept={acceptedFileTypes}
+                        acceptDescription="PNG, JPG ou PDF"
+                        multiple
+                        onChange={handleFiles}
+                        buttonColor="var(--button-bg-primary)"
+                        acceptDescriptionColor="var(--color-quintenary)"
+                        filesList={files}
+                        fontFamily="primary"
+                      />
+                      <Divider
+                        color="var(--color-border-primary)"
+                        children={
+                          <Text
+                            content="ou"
+                            fontFamily="secondary"
+                            textColor="var(--color-border-primary)"
+                            textSize="medium"
+                          />
+                        }
+                        borderLeft={true}
+                        borderRight={true}
+                      />
+                      <Button
+                        variant="primary"
+                        label="Tirar fotos"
+                        type="button"
+                        onClick={handleTakePhotos}
+                      />
+                    </Wrapper>
+                  ) : (
+                    <UploadFile.Root>
+                      <UploadFile.State
+                        uploadState={process === 100 ? "success" : "loading"}
+                      />
+                      <UploadFile.LoadingBar
+                        onChange={(progress) => setProcess(progress)}
+                        showPercentage={true}
+                        files={files}
+                        loadingMessage="Carregando..."
+                        loadedMessage="Carregamento completo"
+                      />
+                      <Wrapper
+                        style={{
+                          display: "flex",
+                          gap: "4px",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          margin: "16px 0",
+                        }}
+                      >
+                        <Button
+                          variant="tertiary"
+                          label="Trocar fotos"
+                          type="button"
+                          onClick={handleChangeFiles}
+                        />
+                        <Text
+                          fontFamily="secondary"
+                          textSize="medium"
+                          textColor="var(--color-quintenary)"
+                          content="ou"
+                        />
+                        <UploadFile.Input
+                          label="Adicionar mais fotos"
+                          name="Adicionar mais fotos"
+                          id="add-more-files"
+                          accept={acceptedFileTypes}
+                          buttonColor="var(--bg-primary)"
+                          textSize="medium"
+                          onChange={handleFiles}
+                          isDisabled={process !== 100}
+                          fontFamily="primary"
+                        />
+                      </Wrapper>
+                    </UploadFile.Root>
+                  )}
 
-						<Droplist
-							placeholder="Selecione a especialidade"
-							handleSelectItem={async (item) => {
-								console.log('item', item);
-								handleSelectSpecialty(item);
-								setValue("specialty", item.value as Specialty);
-								await trigger("specialty");
-							}}
-							label="Especialidade (Opcional)"
-							name="Selectione o tipo"
-							listTitle="Especialidade"
-							list={specialtiesList}
-							fontFamily="secondary"
-							textSize="medium"
-							hasError={errors.specialty ? true : false}
-						/>
+                  {multiDialog.some(
+                    (dialog: any) =>
+                      dialog.id === modalPreviewId && dialog.isOpen
+                  ) && (
+                    <Modal
+                      id={modalPreviewId}
+                      isOpen={multiDialog.some(
+                        (dialog: any) =>
+                          dialog.id === modalPreviewId && dialog.isOpen
+                      )}
+                      onClose={() => closeDialog(modalPreviewId)}
+                      width="large"
+                      customClassName="round"
+                    >
+                      <UploadFile.Preview
+                        title={`Pré-visualização dos arquivos (${files.length})`}
+                        files={files}
+                        onRemove={(file) =>
+                          setFiles((prev) =>
+                            prev.filter((f) => f.name !== file.name)
+                          )
+                        }
+                        fontFamily="primary"
+                        textSize="medium"
+                      />
+                    </Modal>
+                  )}
 
-						<>
-							{multiDialog.some((dialog) => dialog.id === snackBarErrorId && dialog.isOpen) && (
-								<Snackbar
-									isOpen={errorsFiles.length > 0}
-									onClose={() => closeDialog(snackBarErrorId)}
-									type="error"
-									content={
-										<>
-											{errorsFiles.map((error) => (
-												<Text content={error} />
-											))}
-										</>
-									}
-								/>
-							)}
-							{multiDialog.some((dialog) => dialog.id === snackBarSuccessId && dialog.isOpen) && (
-								<Snackbar
-									type="success"
-									isOpen={files.length > 0 && process === 100}
-									onClose={() => closeDialog(snackBarSuccessId)}
-									content={`Upload de ${files.length} arquivo(s) realizado com sucesso!`}
-								/>
-							)}
-							<Wrapper style={{
-								border: '1px dashed var(--color-border-primary)',
-								borderRadius: '20px',
-								width: '100%',
-							}}>
-								<UploadFile.Root>
-									{files.length === 0 ? (
-										<Wrapper
-											style={{
-												display: 'flex',
-												flexDirection: 'column',
-												justifyContent: 'center',
-												alignContent: 'center',
-												flexFlow: 'wrap',
-												gap: '8px',
-												padding: '16px',
-											}}
-										>
-											<UploadFile.Input
-												icon={<IconUploadFile fillColor="var(--button-bg-primary)" />}
-												label="Selecione as fotos da galeria"
-												name="file"
-												id="file"
-												accept={acceptedFileTypes}
-												acceptDescription="PNG, JPG ou PDF"
-												multiple
-												onChange={handleFiles}
-												buttonColor="var(--button-bg-primary)"
-												acceptDescriptionColor="var(--color-quintenary)"
-												filesList={files}
-												fontFamily="primary"
-											/>
-											<Divider
-												color="var(--color-border-primary)"
-												children={
-													<Text
-														content="ou"
-														fontFamily="secondary"
-														textColor="var(--color-border-primary)"
-														textSize="medium"
-													/>
-												}
-												borderLeft={true}
-												borderRight={true}
-											/>
-											<Button
-												variant="primary"
-												label="Tirar fotos"
-												type="button"
-												onClick={handleTakePhotos}
-											/>
-										</Wrapper>
-									) : (
-										<UploadFile.Root>
-											<UploadFile.State
-												uploadState={process === 100 ? 'success' : 'loading'}
-											/>
-											<UploadFile.LoadingBar
-												onChange={(progress) => setProcess(progress)}
-												showPercentage={true}
-												files={files}
-												loadingMessage="Carregando..."
-												loadedMessage="Carregamento completo"
-											/>
-											<Wrapper
-												style={{
-													display: 'flex',
-													gap: '4px',
-													justifyContent: 'center',
-													alignItems: 'center',
-													margin: '16px 0',
-												}}
-											>
-												<Button
-													variant="tertiary"
-													label="Trocar fotos"
-													type="button"
-													onClick={handleChangeFiles}
-												/>
-												<Text
-													fontFamily="secondary"
-													textSize="medium"
-													textColor="var(--color-quintenary)"
-													content="ou"
-												/>
-												<UploadFile.Input
-													label="Adicionar mais fotos"
-													name="Adicionar mais fotos"
-													id="add-more-files"
-													accept={acceptedFileTypes}
-													buttonColor="var(--bg-primary)"
-													textSize="medium"
-													onChange={handleFiles}
-													isDisabled={process !== 100}
-													fontFamily="primary"
-												/>
-											</Wrapper>
-										</UploadFile.Root>
-									)}
+                  {multiDialog.some(
+                    (dialog: any) =>
+                      dialog.id === modalCameraId && dialog.isOpen
+                  ) && (
+                    <Modal
+                      id={modalCameraId}
+                      isOpen={multiDialog.some(
+                        (dialog: any) =>
+                          dialog.id === modalCameraId && dialog.isOpen
+                      )}
+                      onClose={() => closeDialog(modalCameraId)}
+                      width="large"
+                    >
+                      <Camera
+                        buttonRetakePhotoText="Capturar novamente"
+                        buttonTakePhotoText="Capturar foto"
+                        mirrorText="Espelhar"
+                        onCapture={(imageSrc) => {
+                          // Convert base64 to File object
+                          const byteString = atob(imageSrc.split(",")[1]);
+                          const mimeString = imageSrc
+                            .split(",")[0]
+                            .split(":")[1]
+                            .split(";")[0];
+                          const ab = new ArrayBuffer(byteString.length);
+                          const ia = new Uint8Array(ab);
+                          for (let i = 0; i < byteString.length; i++) {
+                            ia[i] = byteString.charCodeAt(i);
+                          }
+                          const blob = new Blob([ab], { type: mimeString });
+                          const file = new File(
+                            [blob],
+                            `photo_${Date.now()}.jpg`,
+                            { type: mimeString }
+                          );
 
-									{multiDialog.some((dialog) => dialog.id === modalPreviewId && dialog.isOpen) && (
-										<Modal
-											id={modalPreviewId}
-											isOpen={multiDialog.some((dialog) => dialog.id === modalPreviewId && dialog.isOpen)}
-											onClose={() => closeDialog(modalPreviewId)}
-											width="large"
-											customClassName="round"
-										>
-											<UploadFile.Preview
-												title={`Pré-visualização dos arquivos (${files.length})`}
-												files={files}
-												onRemove={(file) =>
-													setFiles((prev) => prev.filter((f) => f.name !== file.name))
-												}
-												fontFamily="primary"
-												textSize="medium"
-											/>
-										</Modal>
-									)}
+                          setFiles((prev) => [...prev, file]);
+                          closeDialog(modalCameraId);
+                        }}
+                      />
+                    </Modal>
+                  )}
+                </UploadFile.Root>
+              </Wrapper>
+            </>
 
-									{multiDialog.some((dialog) => dialog.id === modalCameraId && dialog.isOpen) && (
-										<Modal
-											id={modalCameraId}
-											isOpen={multiDialog.some((dialog) => dialog.id === modalCameraId && dialog.isOpen)}
-											onClose={() => closeDialog(modalCameraId)}
-											width='large'
-										>
-											<Camera
-												buttonRetakePhotoText='Capturar novamente'
-												buttonTakePhotoText='Capturar foto'
-												mirrorText='Espelhar'
-												onCapture={(imageSrc) => {
-													// Convert base64 to File object
-													const byteString = atob(imageSrc.split(',')[1]);
-													const mimeString = imageSrc.split(',')[0].split(':')[1].split(';')[0];
-													const ab = new ArrayBuffer(byteString.length);
-													const ia = new Uint8Array(ab);
-													for (let i = 0; i < byteString.length; i++) {
-														ia[i] = byteString.charCodeAt(i);
-													}
-													const blob = new Blob([ab], { type: mimeString });
-													const file = new File([blob], `photo_${Date.now()}.jpg`, { type: mimeString });
+            <Textarea
+              id="observations"
+              ariaLabel="Observações (Opcional)"
+              labelId="observations"
+              label="Observações (Opcional)"
+              placeholder="Dosagem, posologia etc"
+              height="96px"
+              resize={false}
+              fontFamily="secondary"
+              textSize="medium"
+              {...register("observations")}
+            />
 
-													setFiles((prev) => [...prev, file]);
-													closeDialog(modalCameraId);
-												}}
-											/>
-										</Modal>
-									)}
-								</UploadFile.Root>
-							</Wrapper>
-						</>
-
-						<Textarea
-							id="observations"
-							ariaLabel="Observações (Opcional)"
-							labelId="observations"
-							label="Observações (Opcional)"
-							placeholder="Dosagem, posologia etc"
-							height="96px"
-							resize={false}
-							fontFamily="secondary"
-							textSize="medium"
-							{...register("observations")}
-						/>
-
-						{fetcherExam?.data?.error && (
-							<Text
-								content={fetcherExam?.data?.error}
-								fontFamily="primary"
-								textSize="small"
-								textAlign="left"
-								textColor="var(--color-text-error)"
-							/>
-						)}
-						<div className={styles.buttonContainer + " " + styles.flexColumn}>
-							<Button
-								type="submit"
-								label="Salvar exame"
-								ariaLabel="Salvar exame"
-								variant="primary"
-							/>
-						</div>
-					</form>
-
-				</div>
-			</Wrapper>
-		</div>
-	)
+            {fetcherExam?.data?.error && (
+              <Text
+                content={fetcherExam?.data?.error}
+                fontFamily="primary"
+                textSize="small"
+                textAlign="left"
+                textColor="var(--color-text-error)"
+              />
+            )}
+            <div className={styles.buttonContainer + " " + styles.flexColumn}>
+              <Button
+                type="submit"
+                label="Salvar exame"
+                ariaLabel="Salvar exame"
+                variant="primary"
+              />
+            </div>
+          </form>
+        </div>
+      </Wrapper>
+    </div>
+  );
 }

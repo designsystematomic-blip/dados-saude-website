@@ -13,34 +13,37 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  const examId = params.id;
 
-	const examId = params.id;
-	console.log('examId', examId);
-
-  const { hasSession, isValidToken, sessionDestroied, userData } = await authValidate({ request });
+  const { hasSession, isValidToken, sessionDestroied, userData } =
+    await authValidate({ request });
 
   if (!hasSession) {
     return redirect("/login");
   }
 
-  if(!isValidToken && hasSession) {
+  if (!isValidToken && hasSession) {
     return await sessionDestroied();
   }
 
-	const examService = new ExamService(process.env.API_ENDPOINT!);
-  const examResponse = await examService.getExamById({ token: userData.token, userId: userData.id, examId: examId! });
-	const examData = await examResponse.json();
+  const examService = new ExamService(process.env.API_ENDPOINT!);
+  const examResponse = await examService.getExamById({
+    token: userData.token,
+    userId: userData.id,
+    examId: examId!,
+  });
+  const examData = await examResponse.json();
 
-	if (!examResponse.ok) {
-		return redirect("/exam");
-	}
+  if (!examResponse.ok) {
+    return redirect("/exam");
+  }
 
   return {
     meta: {
       title: "Exame",
-      link: "/exam"
+      link: "/exam",
     },
     user: userData,
-		exam: examData.exam
+    exam: examData.exam,
   };
 }

@@ -1,5 +1,5 @@
 import type { Route } from "../../routes/+types/login";
-import { Title, Wrapper, Input, Button, Text } from "dados-saude";
+import { Title, Wrapper, Input, Button, Text } from "design-system-atomic";
 import logoWithName from "../../assets/logoMedium.png";
 
 import styles from "./Login.module.css";
@@ -18,7 +18,7 @@ export default function Login({ loaderData }: Route.ComponentProps) {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginFormSchema),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const handleFetcher = (data: any) => {
@@ -80,7 +80,7 @@ export default function Login({ loaderData }: Route.ComponentProps) {
               </Link>
             </div>
             {fetcherLogin?.data?.error && (
-              <Text 
+              <Text
                 content={fetcherLogin?.data?.error}
                 fontFamily="primary"
                 textSize="small"
@@ -98,7 +98,6 @@ export default function Login({ loaderData }: Route.ComponentProps) {
             </div>
             <RegisterText />
           </form>
-
         </div>
       </Wrapper>
     </div>
