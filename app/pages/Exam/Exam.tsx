@@ -176,6 +176,7 @@ export default function Exam() {
 							tag="h1"
 							textAlign="left"
 							fontWeight="bold"
+							textColor="var(--color-text-primary)"
 							style={{ color: 'var(--color-text-primary)', marginBottom: '8px' }}
 						/>
 						<Title
@@ -381,7 +382,7 @@ export default function Exam() {
 											<Title
 												content={`${file.mimeType} • ${(file.size / 1024).toFixed(2)} KB`}
 												fontFamily="primary"
-												tag="small"
+												textSize="small"
 												fontWeight="regular"
 												style={{ color: 'var(--color-text-tertiary)' }}
 											/>
@@ -400,7 +401,7 @@ export default function Exam() {
 															<Title
 																content="📄 Clique para visualizar PDF"
 																fontFamily="primary"
-																tag="small"
+																textSize="small"
 																style={{ color: 'var(--color-text-secondary)' }}
 															/>
 														</div>
@@ -421,7 +422,7 @@ export default function Exam() {
 												type="button"
 												variant="tertiary"
 												label={downloading === file.id ? "Baixando..." : "Download"}
-												disabled={downloading === file.id}
+												isDisabled={downloading === file.id}
 												onClick={() => handleDownloadFile(file.id, file.filename)}
 											/>
 										</div>
@@ -475,7 +476,7 @@ export default function Exam() {
 								variant="tertiary"
 								label="✕"
 								onClick={handleCloseModal}
-								style={{ padding: '8px 12px' }}
+								customStyles={{ padding: '8px 12px' }}
 							/>
 						</div>
 						<div className={styles.modalBody}>
@@ -505,7 +506,7 @@ export default function Exam() {
 								type="button"
 								variant="primary"
 								label={downloading === selectedFile.id ? "Baixando..." : "Download"}
-								disabled={downloading === selectedFile.id}
+								isDisabled={downloading === selectedFile.id}
 								onClick={() => handleDownloadFile(selectedFile.id, selectedFile.filename)}
 							/>
 						</div>
