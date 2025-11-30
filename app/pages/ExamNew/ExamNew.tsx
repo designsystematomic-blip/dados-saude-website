@@ -138,7 +138,7 @@ export default function ExamNew() {
 					>
 						<Input
 							id="name"
-							ariaLabel="Nome"
+							ariaLabel="name"
 							labelId="name"
 							description=""
 							label="Nome"
@@ -377,7 +377,7 @@ export default function ExamNew() {
 						<Textarea
 							id="observations"
 							ariaLabel="Observações (Opcional)"
-							labelId="observations"
+							labelId="observations-id"
 							label="Observações (Opcional)"
 							placeholder="Dosagem, posologia etc"
 							height="96px"

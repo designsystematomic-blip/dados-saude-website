@@ -102,7 +102,7 @@ export default function HeaderMount() {
 	return (
 		<div>
 			<Header.Wrapper>
-				<Link to="/">
+				<Link to="/" aria-label="Ir para página inicial">
 					<Header.Logo
 						type="svg"
 						svg={<IconTulip />}
