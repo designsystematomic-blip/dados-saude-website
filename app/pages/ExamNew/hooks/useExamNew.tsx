@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useDialog, validateFile } from "dados-saude";
+import { useDialog, validateFile } from "design-system-atomic";
 
 function handleFileUpload() {
 	const [files, setFiles] = useState<File[]>([]);
