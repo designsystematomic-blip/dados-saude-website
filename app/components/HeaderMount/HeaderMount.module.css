@@ -1,46 +1,52 @@
 .drawerMenu {
-	height: 100vh;
+  height: 100vh;
 }
 
 .drawerContent {
-	height: 100%;
+  height: 100%;
 }
 
 .drawerHeader {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: var(--bg-primary);
-	padding: 48px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-primary);
+  padding: 48px 32px;
 }
 
 .drawerButtonClose {
-	cursor: pointer;
-	background-color: transparent;
-	appearance: none;
-	border: none;
+  cursor: pointer;
+  background-color: transparent;
+  appearance: none;
+  border: none;
 }
 
 .drawerUser {
-	display: flex;
-	align-items: center;
-	gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .drawerUserImage {
-	width: 72px;
-	height: 72px;
+  width: 72px;
+  height: 72px;
 }
 
 .drawerUserImage * {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .menuLink {
-	text-decoration: none;
-	color: inherit;
-	width: 100%;
-	text-align: left;
-	margin-left: 8px;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  text-align: left;
+  margin-left: 8px;
+}
+
+.headerLogo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

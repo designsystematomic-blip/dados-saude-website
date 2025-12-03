@@ -77,8 +77,6 @@ export default function Exam() {
     return examService.getFileStreamUrl({ fileId, token: user.token });
   };
 
-  console.log("examData", exam);
-
   useEffect(() => {
     setPage((prev) => ({
       ...prev,
@@ -183,6 +181,7 @@ export default function Exam() {
               textAlign="left"
               fontWeight="bold"
               textColor="var(--color-text-primary)"
+              style={{ marginBottom: "8px" }}
             />
             <Title
               content={`Data do exame: ${new Date(exam.date).toLocaleDateString("pt-BR")}`}
@@ -229,6 +228,7 @@ export default function Exam() {
                     tag="h4"
                     fontWeight="bold"
                     textColor="var(--color-text-primary)"
+                    style={{ marginBottom: "4px" }}
                   />
                   <Title
                     content={exam.name}
@@ -245,6 +245,7 @@ export default function Exam() {
                     tag="h4"
                     fontWeight="bold"
                     textColor="var(--color-text-primary)"
+                    style={{ marginBottom: "4px" }}
                   />
                   <Title
                     content={new Date(exam.date).toLocaleDateString("pt-BR")}
@@ -263,6 +264,7 @@ export default function Exam() {
                     tag="h4"
                     fontWeight="bold"
                     textColor="var(--color-text-primary)"
+                    style={{ marginBottom: "4px" }}
                   />
                   <Title
                     content={translateExamType(exam.type)}
@@ -279,6 +281,7 @@ export default function Exam() {
                     tag="h4"
                     fontWeight="bold"
                     textColor="var(--color-text-primary)"
+                    style={{ marginBottom: "4px" }}
                   />
                   <Title
                     content={translateSpecialty(exam.specialty)}
@@ -301,6 +304,7 @@ export default function Exam() {
                       tag="h4"
                       fontWeight="bold"
                       textColor="var(--color-text-primary)"
+                      style={{ marginBottom: "4px" }}
                     />
                     <Title
                       content={exam.observations}
@@ -335,6 +339,7 @@ export default function Exam() {
                       tag="h4"
                       fontWeight="bold"
                       textColor="var(--color-text-primary)"
+                      style={{ marginBottom: "4px" }}
                     />
                     <Title
                       content={exam.user.name || "Não informado"}
@@ -351,6 +356,7 @@ export default function Exam() {
                       tag="h4"
                       fontWeight="bold"
                       textColor="var(--color-text-primary)"
+                      style={{ marginBottom: "4px" }}
                     />
                     <Title
                       content={exam.user.email}
@@ -386,6 +392,7 @@ export default function Exam() {
                         tag="h5"
                         fontWeight="bold"
                         textColor="var(--color-text-primary)"
+                        style={{ marginBottom: "4px" }}
                       />
                       <Title
                         content={`${file.mimeType} • ${(file.size / 1024).toFixed(2)} KB`}

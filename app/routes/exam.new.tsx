@@ -15,16 +15,19 @@ export function meta({}: Route.MetaArgs) {
 export async function action({ request }: LoaderFunctionArgs) {
   const { token } = await authValidate({ request });
   const formData = await request.formData();
+  console.log("formData", formData);
   const service = new ExamService(process.env.API_ENDPOINT!);
   const response = await service.createExam({
     data: formData,
     token: token,
   });
 
+  const result = await response.json();
   if (response.ok) {
-    const result = await response.json();
     return { success: true, data: result };
   }
+
+  return { success: false, data: result };
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -42,8 +45,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     meta: {
-      title: "Exame",
-      link: "/exam/new",
+      title: "Exames",
+      link: "/exam",
     },
     user: userData,
   };

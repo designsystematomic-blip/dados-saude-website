@@ -78,7 +78,7 @@ export default function ExamList() {
       ) : (
         <Wrapper
           style={{
-            height: "100vh",
+            height: "auto",
             padding: 0,
           }}
         >

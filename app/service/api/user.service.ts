@@ -25,15 +25,19 @@ export class UserService {
     return response.json();
   }
 
-  async register({ user }: { user: {
-      name: string,
-      email: string,
-      phone: string,
-      cpf: string,
-      sex: string,
-      birthDate: string,
-      password: string,
-  }}) {
+  async register({
+    user,
+  }: {
+    user: {
+      name: string;
+      email: string;
+      phone: string;
+      cpf: string;
+      sex: string;
+      birthDate: string;
+      password: string;
+    };
+  }) {
     const response = await fetch(`${this.endpoint}/users/register`, {
       method: "POST",
       headers: {
@@ -44,7 +48,7 @@ export class UserService {
     return response.json();
   }
 
-  async login({ email, password }: { email: string, password: string}) {
+  async login({ email, password }: { email: string; password: string }) {
     const response = await fetch(`${this.endpoint}/users/login`, {
       method: "POST",
       headers: {
@@ -52,8 +56,6 @@ export class UserService {
       },
       body: JSON.stringify({ email, password }),
     });
-
-    console.log('response', response)
 
     return response.json();
   }

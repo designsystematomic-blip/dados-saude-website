@@ -23,6 +23,8 @@ import { Link } from "react-router";
 import { useStore } from "~/contexts/StoreContext";
 import styles from "./HeaderMount.module.css";
 
+import DadosSaudeLogoName from "../../assets/logo-name.png";
+
 export default function HeaderMount() {
   const { page, user } = useStore();
   const [openMenuDrawer, setOpenMenuDrawer] = useState<boolean>(false);
@@ -162,12 +164,22 @@ export default function HeaderMount() {
     <div>
       <Header.Wrapper>
         <Link to="/" aria-label="Ir para página inicial">
-          <Header.Logo
-            type="svg"
-            svg={<IconTulip />}
-            size="regular"
-            alt="Tulip Ion"
-          />
+          <div className={styles.headerLogo}>
+            <Header.Logo
+              type="svg"
+              svg={<IconTulip />}
+              size="regular"
+              alt="Tulip Ion"
+            />
+            <div className="hidden-mobile">
+              <Header.Logo
+                type="img"
+                size="original"
+                alt="Dados Saúde Logo"
+                src={DadosSaudeLogoName}
+              />
+            </div>
+          </div>
         </Link>
         <a href={page.link} title={page.title} className={styles.headerTitle}>
           <Title tag="h2" content={page.title} fontFamily="primary" />

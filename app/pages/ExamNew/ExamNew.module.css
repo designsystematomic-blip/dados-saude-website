@@ -19,3 +19,14 @@
 .buttonContainer button {
   align-self: center;
 }
+
+@media screen and (min-width: 767px) {
+  .page {
+    padding: 24px;
+    width: 80%;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 51px;
+    margin-top: 20px;
+  }
+}

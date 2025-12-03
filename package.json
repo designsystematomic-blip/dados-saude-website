@@ -4,19 +4,20 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "npm link dados-saude && react-router dev",
+    "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "lib:v": "npm view dados-saude-lib-components version",
-    "link:lib": "npm link dados-saude",
-    "unlink": "npm unlink dados-saude",
-    "generate": "cross-env NODE_OPTIONS=\"--import tsx\" plop --plopfile=./generate/plopfile.ts"
+    "lib:v": "npm view design-system-atomic version",
+    "link:lib": "npm link design-system-atomic",
+    "unlink": "npm unlink design-system-atomic",
+    "generate": "cross-env NODE_OPTIONS=\"--import tsx\" plop --plopfile=./generate/plopfile.ts",
+    "update:lib": "npm install design-system-atomic@latest"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
-    "design-system-atomic": "^1.0.1",
+    "design-system-atomic": "^1.0.5",
     "isbot": "^5.1.31",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

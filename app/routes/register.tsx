@@ -16,7 +16,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  
+
   // Extrai os dados do formulário
   const registrationData = {
     name: formData.get("name") as string,
@@ -32,18 +32,8 @@ export async function action({ request }: ActionFunctionArgs) {
     // Aqui você faria a chamada para sua API de backend
     const api = process.env.API_ENDPOINT;
 
-    const service = new UserService(api!)
+    const service = new UserService(api!);
     const response = await service.register({ user: registrationData });
-
-    // const response = await fetch(`${api}/users/register`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(registrationData),
-    // });
-
-    console.log('response', response)
 
     if (response.error) {
       return {

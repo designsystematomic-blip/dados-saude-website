@@ -27,7 +27,6 @@ export default function ExamNew() {
 
   const fetcherExam = useFetcher({ key: "nex-exam" });
   const { setPage, handleSetUser } = useStore();
-  const navigate = useNavigate();
   const acceptedFileTypes = "image/*,application/pdf";
 
   const { meta, user } = loader;
@@ -50,6 +49,7 @@ export default function ExamNew() {
     setValue,
     trigger,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: zodResolver(examNewFormSchema),
     mode: "onChange",
@@ -93,14 +93,17 @@ export default function ExamNew() {
     modalCameraId,
     multiDialog,
     closeDialog,
-    selectedSpecialty,
-    selectedType,
     handleSelectType,
     handleSelectSpecialty,
     snackBarSuccessId,
     snackBarErrorId,
     handleSnackBarSuccess,
     handleSnackBarError,
+    snackbarDuration,
+    snackbarExamSavedSuccessId,
+    snackbarExamSavedErrorId,
+    handleSnackBarExamSavedSuccess,
+    handleSnackBarExamSavedError,
     examList,
     specialtiesList,
   } = useExamNew();
@@ -119,6 +122,60 @@ export default function ExamNew() {
       handleSnackBarError();
     }
   }, [errorsFiles]);
+
+  // Auto-close snackbars after duration
+  useEffect(() => {
+    if (
+      multiDialog.some(
+        (dialog: any) => dialog.id === snackBarSuccessId && dialog.isOpen
+      )
+    ) {
+      const timer = setTimeout(() => {
+        closeDialog(snackBarSuccessId);
+      }, snackbarDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [multiDialog, snackBarSuccessId, closeDialog, snackbarDuration]);
+
+  useEffect(() => {
+    if (
+      multiDialog.some(
+        (dialog: any) => dialog.id === snackBarErrorId && dialog.isOpen
+      )
+    ) {
+      const timer = setTimeout(() => {
+        closeDialog(snackBarErrorId);
+      }, snackbarDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [multiDialog, snackBarErrorId, closeDialog, snackbarDuration]);
+
+  useEffect(() => {
+    if (
+      multiDialog.some(
+        (dialog: any) =>
+          dialog.id === snackbarExamSavedSuccessId && dialog.isOpen
+      )
+    ) {
+      const timer = setTimeout(() => {
+        closeDialog(snackbarExamSavedSuccessId);
+      }, snackbarDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [multiDialog, snackbarExamSavedSuccessId, closeDialog, snackbarDuration]);
+
+  useEffect(() => {
+    if (
+      multiDialog.some(
+        (dialog: any) => dialog.id === snackbarExamSavedErrorId && dialog.isOpen
+      )
+    ) {
+      const timer = setTimeout(() => {
+        closeDialog(snackbarExamSavedErrorId);
+      }, snackbarDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [multiDialog, snackbarExamSavedErrorId, closeDialog, snackbarDuration]);
 
   // Accessibility - Close modal on ESC key press
   useEffect(() => {
@@ -142,9 +199,28 @@ export default function ExamNew() {
     };
   }, [multiDialog, closeDialog]);
 
+  useEffect(() => {
+    if (fetcherExam?.data?.success) {
+      handleSnackBarExamSavedSuccess();
+      return;
+    }
+
+    if (fetcherExam?.data?.error) {
+      handleSnackBarExamSavedError();
+      return;
+    }
+  }, [fetcherExam]);
+
+  const handleResetForm = () => {
+    //form reset
+    reset();
+    setFiles([]);
+    setProcess(0);
+  };
+
   return (
     <div className={styles.page}>
-      <Wrapper style={{ marginTop: "24px" }}>
+      <Wrapper style={{ margin: "24px 0" }}>
         <div>
           <form
             method="post"
@@ -182,7 +258,6 @@ export default function ExamNew() {
                 placeholder="Selecione"
                 handleSelectItem={async (item) => {
                   handleSelectType(item);
-                  console.log("item", item);
                   setValue("type", item.value as ExamType);
                   await trigger("type");
                 }}
@@ -199,7 +274,6 @@ export default function ExamNew() {
             <Droplist
               placeholder="Selecione a especialidade"
               handleSelectItem={async (item) => {
-                console.log("item", item);
                 handleSelectSpecialty(item);
                 setValue("specialty", item.value as Specialty);
                 await trigger("specialty");
@@ -447,8 +521,38 @@ export default function ExamNew() {
                 label="Salvar exame"
                 ariaLabel="Salvar exame"
                 variant="primary"
+                isLoading={fetcherExam.state === "submitting"}
               />
             </div>
+
+            {fetcherExam?.data?.success &&
+              multiDialog.some(
+                (dialog: any) =>
+                  dialog.id === snackbarExamSavedSuccessId && dialog.isOpen
+              ) && (
+                <Snackbar
+                  type="success"
+                  isOpen={files.length > 0 && process === 100}
+                  onClose={() => {
+                    closeDialog(snackbarExamSavedSuccessId);
+                    handleResetForm();
+                  }}
+                  content={`Exame criado com sucesso!`}
+                />
+              )}
+
+            {fetcherExam?.data?.error &&
+              multiDialog.some(
+                (dialog: any) =>
+                  dialog.id === snackbarExamSavedErrorId && dialog.isOpen
+              ) && (
+                <Snackbar
+                  type="error"
+                  isOpen={true}
+                  onClose={() => closeDialog(snackbarExamSavedErrorId)}
+                  content={`Erro ao salvar o exame. Por favor, tente novamente.`}
+                />
+              )}
           </form>
         </div>
       </Wrapper>
