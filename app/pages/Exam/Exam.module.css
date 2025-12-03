@@ -80,14 +80,10 @@
 
 .examInfoItem h4 {
   margin: 0 0 4px 0;
-  font-size: 14px;
-  font-weight: 600;
 }
 
 .examInfoItem p {
   margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
 }
 
 /* Estilos para lista de arquivos */
@@ -101,20 +97,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 16px 0;
   background-color: var(--color-background-secondary);
-  border-radius: 8px;
-  border: 1px solid var(--color-border-primary);
+  border-bottom: 2px solid var(--color-border-primary);
 }
 
 .fileInfo {
   flex: 1;
-}
-
-.fileInfo h5 {
-  margin: 0 0 4px 0;
-  font-size: 16px;
-  font-weight: 600;
 }
 
 .fileInfo small {

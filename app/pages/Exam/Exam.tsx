@@ -389,8 +389,8 @@ export default function Exam() {
                       <Title
                         content={file.filename}
                         fontFamily="primary"
-                        tag="h5"
-                        fontWeight="bold"
+                        tag="h4"
+                        fontWeight="regular"
                         textColor="var(--color-text-primary)"
                         style={{ marginBottom: "4px" }}
                       />
@@ -399,6 +399,7 @@ export default function Exam() {
                         fontFamily="primary"
                         fontWeight="regular"
                         textColor="var(--color-text-primary)"
+                        tag="h5"
                       />
                       {(isImageFile(file.mimeType) ||
                         isPdfFile(file.mimeType)) && (

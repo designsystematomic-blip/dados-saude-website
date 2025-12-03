@@ -9,4 +9,5 @@ export default [
   route("exam", "routes/exam.tsx"),
   route('exam/:id', 'routes/exam.$id.tsx'),
   route("exam/new", "routes/exam.new.tsx"),
+  route("exam/:id/edit", "routes/exam.$id.edit.tsx"),
 ] satisfies RouteConfig;
