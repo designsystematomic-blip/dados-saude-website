@@ -30,7 +30,7 @@ O **Dados Saúde Frontend** é uma aplicação web moderna desenvolvida em **Rea
 - 🚀 **Performance**: SSR com Remix e otimizações modernas
 - 🔄 **Estado Global**: Context API para gerenciamento de estado
 
-## 🚀 Tecnologias
+## 🚀 Tecnologias do website
 
 ### Core
 - **[Remix](https://remix.run/)** v2.x - Full-stack web framework
@@ -40,7 +40,7 @@ O **Dados Saúde Frontend** é uma aplicação web moderna desenvolvida em **Rea
 
 ### Styling & UI
 - **CSS Modules** - Estilização encapsulada
-- **dados-saude** - Design system próprio
+- **design-system-atomic** - Design system próprio
 - **CSS Custom Properties** - Theming e variáveis
 
 ### Forms & Validation
@@ -94,15 +94,15 @@ O **Dados Saúde Frontend** é uma aplicação web moderna desenvolvida em **Rea
 - **Git** ([Download](https://git-scm.com/))
 
 ### Dependências Externas
-- **Backend**: [`dados-saude-backend`](../dados-saude-backend) rodando na porta 8000
-- **Design System**: [`dados-saude-lib-components`](../dados-saude-lib-components) linkado localmente
+- **Backend**: [`dados-saude-backend`](https://github.com/designsystematomic-blip/dados-saude-backend) rodando localmente na porta 8000
+- **Design System**: [`dados-saude-lib-components`](https://github.com/designsystematomic-blip/dados-saude-lib-components) [Instalado via NPM no package.json]
 
 ## 🛠 Instalação
 
 ### 1. Clone e acesse o projeto
 ```bash
 git clone <url-do-repositorio>
-cd pos-graduacao/dados-saude-website
+cd ./dados-saude-website
 ```
 
 ### 2. Instale as dependências
@@ -110,20 +110,22 @@ cd pos-graduacao/dados-saude-website
 npm install
 ```
 
-### 3. Desenvolvimento local com a biblioteca de componentes
-```bash
-# Primeiro, build e link a biblioteca (na pasta raiz do projeto)
-cd ../dados-saude-lib-components
-npm install
-npm run build
-npm link
+### 3. Desenvolvimento com a biblioteca de componentes instalada via NPM
 
-# Volte para o frontend e faça o link
-cd ../dados-saude-website
-npm link dados-saude
-```
+*Caso seja necessário criar novos componentes na biblioteca e queira testá-los localmente nesse front-end, siga o passo 4 abaixo.*
 
-### 4. Configure variáveis de ambiente
+Para este passo 3, será mostrado como o projeto pode ser rodado com a última versão da design system Atomic publicada no [NPM](https://www.npmjs.com/package/design-system-atomic).
+
+### 3.1 Setup do backend
+
+Certifique-se que o back-end esteja rodando na porta 8000. Para isso, verificar o passo a passo de desenvolvimento local descrito no readme.md do projeto: [dados-saude-backend](https://github.com/designsystematomic-blip/dados-saude-backend).
+
+### 3.2. Configure variáveis de ambiente
+
+Crie um arquivo chamado .env na raiz do projeto com base no arquivo .env.exame
+
+ou
+
 ```bash
 cp .env.example .env
 ```
@@ -138,6 +140,58 @@ NODE_ENV=development
 
 ```
 
+### 3.3 
+
+Uma vez que o backend está rodando na porta 8000, basta inicializar o front-end:
+
+```bash
+npm run dev
+```
+
+### 4. Desenvolvimento local com a biblioteca de componentes Design System Atomic
+
+Neste passo, é demonstrado como rodar o front-end junto com a biblioteca de componentes com componentes que ainda estão em construção e não foram publicados.
+
+```bash
+git clone https://github.com/designsystematomic-blip/dados-saude-lib-components
+```
+
+Acessar a pasta da biblioteca na sua IDE de preferência
+
+```bash
+cd ./dados-saude-lib-components && code .
+```
+
+Instalar as dependências via terminal
+
+```bash
+npm install
+```
+
+Tornar a biblioteca linkável via npm
+
+```bash
+npm link
+```
+
+Rodar o watch da biblioteca para sempre realizar a build a cada alteração feita
+
+```bash
+npm run watch
+```
+
+A biblioteca já está pronta para ser utilizada por um repositório consumidor React JS.
+
+
+### 4.1 Volte para o frontend e faça o link
+
+```
+cd ../dados-saude-website
+npm link design-system-atomic
+```
+
+Dessa forma, o projeto já está pronto para ser executado.
+
 ## 🚀 Execução
 
 ### Desenvolvimento
@@ -146,16 +200,6 @@ npm run dev
 ```
 Acesse: **http://localhost:5173**
 
-### Build de Produção
-```bash
-npm run build
-npm run preview
-```
-
-### Verificação de Tipos
-```bash
-npm run typecheck
-```
 
 ## 📁 Estrutura do Projeto
 
@@ -340,13 +384,13 @@ npm run postinstall    # Executado automaticamente após npm install
 ### Principais Dependências Externas
 
 #### Backend API
-- **Repositório**: [`dados-saude-backend`](../dados-saude-backend)
+- **Repositório**: [`dados-saude-backend`](https://github.com/designsystematomic-blip/dados-saude-backend)
 - **Tecnologia**: Node.js + Express + Prisma
 - **Porta**: 8000
 - **Funcionalidades**: Autenticação, CRUD de exames, upload de arquivos
 
 #### Design System
-- **Repositório**: [`dados-saude-lib-components`](../dados-saude-lib-components)  
+- **Repositório**: [`dados-saude-lib-components`](https://github.com/designsystematomic-blip/dados-saude-lib-components)  
 - **Tecnologia**: React + TypeScript + CSS Modules
 - **Componentes**: 11 componentes reutilizáveis
 - **Funcionalidades**: UI consistente e acessível
@@ -386,3 +430,11 @@ cd dados-saude-website && npm link design-system-atomic && npm run dev
 **⚡ Dados Saúde Frontend** - Interface moderna e acessível para gestão de dados de saúde, desenvolvida com React/Remix e design system próprio.
 
 💙 Desenvolvido com foco em **acessibilidade**, **performance** e **experiência do usuário**.
+
+## 📝 Licença
+
+Este projeto é parte do projeto de conclusão de pós-graduação do IFBA.
+
+## 👥 Dúvidas?
+
+amandaprates1997@gmail.com
