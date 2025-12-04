@@ -1,5 +1,29 @@
 import z from "zod/v4";
 
+export const examEditFormSchema = z.object({
+    name: z
+        .string()
+        .min(1, "Nome do exame é obrigatório")
+        .max(255, "Nome deve ter no máximo 255 caracteres"),
+    date: z
+        .string()
+        .min(1, "Data do exame é obrigatória"),
+    type: z
+        .string()
+        .min(1, "Tipo do exame é obrigatório"),
+    specialty: z
+        .string()
+        .optional(),
+    observations: z
+        .string()
+        .max(1000, "Observações devem ter no máximo 1000 caracteres")
+        .optional(),
+    files: z
+        .array(z.instanceof(File))
+        .optional(),
+});
+
+
 export enum ExamType {
   BLOOD_TEST = 'BLOOD_TEST',
   URINE_TEST = 'URINE_TEST',
@@ -51,4 +75,5 @@ export const examNewFormSchema = z.object({
 });
 
 export type UserLoginData = z.infer<typeof examNewFormSchema>;
+export type ExamEditFormData = z.infer<typeof examEditFormSchema>;
 
