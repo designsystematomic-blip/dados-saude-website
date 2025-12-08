@@ -12,7 +12,7 @@ import {
   Snackbar,
   Divider,
 } from "design-system-atomic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFetcher, useLoaderData, useNavigate } from "react-router";
 import { useStore } from "~/contexts/StoreContext";
 import styles from "./ExamNew.module.css";
@@ -24,6 +24,7 @@ import type { ExamType, Specialty } from "~/global/user";
 
 export default function ExamNew() {
   const loader = useLoaderData();
+  const [formSaved, setFormSaved] = useState(false);
 
   const fetcherExam = useFetcher({ key: "nex-exam" });
   const { setPage, handleSetUser } = useStore();
@@ -202,6 +203,7 @@ export default function ExamNew() {
   useEffect(() => {
     if (fetcherExam?.data?.success) {
       handleSnackBarExamSavedSuccess();
+      setFormSaved(true);
       return;
     }
 
@@ -245,7 +247,7 @@ export default function ExamNew() {
               <Input
                 id="date"
                 type="date"
-                ariaLabel="Birth Date"
+                ariaLabel="Data do exame"
                 labelId="date"
                 label="Data do exame"
                 placeholder="xx/xx/xxxx"
@@ -522,6 +524,7 @@ export default function ExamNew() {
                 ariaLabel="Salvar exame"
                 variant="primary"
                 isLoading={fetcherExam.state === "submitting"}
+                isDisabled={fetcherExam.state === "submitting" || formSaved}
               />
             </div>
 
@@ -537,7 +540,7 @@ export default function ExamNew() {
                     closeDialog(snackbarExamSavedSuccessId);
                     handleResetForm();
                   }}
-                  content={`Exame criado com sucesso!`}
+                  content={`Exame criado com sucesso! O exame já está disponível na sua lista de exames.`}
                 />
               )}
 

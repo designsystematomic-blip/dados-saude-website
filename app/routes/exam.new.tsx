@@ -15,7 +15,6 @@ export function meta({}: Route.MetaArgs) {
 export async function action({ request }: LoaderFunctionArgs) {
   const { token } = await authValidate({ request });
   const formData = await request.formData();
-  console.log("formData", formData);
   const service = new ExamService(process.env.API_ENDPOINT!);
   const response = await service.createExam({
     data: formData,
@@ -26,6 +25,8 @@ export async function action({ request }: LoaderFunctionArgs) {
   if (response.ok) {
     return { success: true, data: result };
   }
+
+  console.log("result xxx", result);
 
   return { success: false, data: result };
 }

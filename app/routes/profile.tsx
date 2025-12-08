@@ -1,13 +1,13 @@
 import { redirect, type LoaderFunctionArgs } from "react-router";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/profile";
 import authValidate from "~/handlers/auth.handler";
 
-export { default } from "../pages/Home";
+export { default } from "../pages/Profile";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Dados Saúde - Tela inicial" },
-    { name: "description", content: "Bem-vindo ao Dados Saúde!" },
+    { title: "Dados Saúde - Perfil" },
+    { name: "description", content: "Welcome to React Router!" },
   ];
 }
 
@@ -25,7 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     meta: {
-      title: "Início",
+      title: "Perfil",
       link: "/",
     },
     user: userData,

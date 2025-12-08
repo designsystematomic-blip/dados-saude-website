@@ -3,6 +3,7 @@ import {
   Card,
   EmptyState,
   IconDocumentEmptyFolder,
+  Text,
   Title,
   Wrapper,
 } from "design-system-atomic";
@@ -174,37 +175,38 @@ export default function Exam() {
         {/* Header com ações */}
         <div className={styles.examHeader}>
           <div className={styles.examHeaderInfo}>
-            <Title
-              content={exam.name}
-              fontFamily="secondary"
-              tag="h1"
-              textAlign="left"
-              fontWeight="bold"
-              textColor="var(--color-text-primary)"
-              style={{ marginBottom: "8px" }}
-            />
-            <Title
-              content={`Data do exame: ${new Date(exam.date).toLocaleDateString("pt-BR")}`}
-              fontFamily="primary"
-              tag="h3"
-              textAlign="left"
-              fontWeight="regular"
-              textColor="var(--color-text-secondary)"
-            />
-          </div>
-          <div className={styles.examHeaderActions}>
-            <Button
-              type="button"
-              variant="secondary"
-              label="Voltar"
-              onClick={() => navigate("/exam")}
-            />
-            <Button
-              type="button"
-              variant="primary"
-              label="Editar Exame"
-              onClick={() => navigate(`/exam/${exam.id}/edit`)}
-            />
+            <div>
+              <Title
+                content={exam.name}
+                fontFamily="secondary"
+                tag="h1"
+                textAlign="left"
+                fontWeight="bold"
+                textColor="var(--color-text-primary)"
+                style={{ marginBottom: "8px" }}
+              />
+              <Text
+                content={`Data do exame: ${new Date(exam.date).toLocaleDateString("pt-BR")}`}
+                fontFamily="primary"
+                textAlign="left"
+                fontWeight="regular"
+                textColor="var(--color-text-secondary)"
+              />
+            </div>
+            <div className={styles.examHeaderActions}>
+              <Button
+                type="button"
+                variant="secondary"
+                label="Voltar"
+                onClick={() => navigate("/exam")}
+              />
+              <Button
+                type="button"
+                variant="primary"
+                label="Editar Exame"
+                onClick={() => navigate(`/exam/${exam.id}/edit`)}
+              />
+            </div>
           </div>
         </div>
 
@@ -230,10 +232,9 @@ export default function Exam() {
                     textColor="var(--color-text-primary)"
                     style={{ marginBottom: "4px" }}
                   />
-                  <Title
+                  <Text
                     content={exam.name}
                     fontFamily="primary"
-                    tag="p"
                     fontWeight="regular"
                     textColor="var(--color-text-secondary)"
                   />
@@ -247,10 +248,9 @@ export default function Exam() {
                     textColor="var(--color-text-primary)"
                     style={{ marginBottom: "4px" }}
                   />
-                  <Title
+                  <Text
                     content={new Date(exam.date).toLocaleDateString("pt-BR")}
                     fontFamily="primary"
-                    tag="p"
                     fontWeight="regular"
                     textColor="var(--color-text-secondary)"
                   />
@@ -266,10 +266,9 @@ export default function Exam() {
                     textColor="var(--color-text-primary)"
                     style={{ marginBottom: "4px" }}
                   />
-                  <Title
+                  <Text
                     content={translateExamType(exam.type)}
                     fontFamily="primary"
-                    tag="p"
                     fontWeight="regular"
                     textColor="var(--color-text-secondary)"
                   />
@@ -283,10 +282,9 @@ export default function Exam() {
                     textColor="var(--color-text-primary)"
                     style={{ marginBottom: "4px" }}
                   />
-                  <Title
+                  <Text
                     content={translateSpecialty(exam.specialty)}
                     fontFamily="primary"
-                    tag="p"
                     fontWeight="regular"
                     textColor="var(--color-text-secondary)"
                   />
@@ -306,10 +304,9 @@ export default function Exam() {
                       textColor="var(--color-text-primary)"
                       style={{ marginBottom: "4px" }}
                     />
-                    <Title
+                    <Text
                       content={exam.observations}
                       fontFamily="primary"
-                      tag="p"
                       fontWeight="regular"
                       textColor="var(--color-text-secondary)"
                     />
@@ -341,10 +338,9 @@ export default function Exam() {
                       textColor="var(--color-text-primary)"
                       style={{ marginBottom: "4px" }}
                     />
-                    <Title
+                    <Text
                       content={exam.user.name || "Não informado"}
                       fontFamily="primary"
-                      tag="p"
                       fontWeight="regular"
                       textColor="var(--color-text-secondary)"
                     />
@@ -358,10 +354,9 @@ export default function Exam() {
                       textColor="var(--color-text-primary)"
                       style={{ marginBottom: "4px" }}
                     />
-                    <Title
+                    <Text
                       content={exam.user.email}
                       fontFamily="primary"
-                      tag="p"
                       fontWeight="regular"
                       textColor="var(--color-text-secondary)"
                     />
@@ -394,12 +389,11 @@ export default function Exam() {
                         textColor="var(--color-text-primary)"
                         style={{ marginBottom: "4px" }}
                       />
-                      <Title
+                      <Text
                         content={`${file.mimeType} • ${(file.size / 1024).toFixed(2)} KB`}
                         fontFamily="primary"
                         fontWeight="regular"
                         textColor="var(--color-text-primary)"
-                        tag="h5"
                       />
                       {(isImageFile(file.mimeType) ||
                         isPdfFile(file.mimeType)) && (
@@ -432,7 +426,7 @@ export default function Exam() {
                         isPdfFile(file.mimeType)) && (
                         <Button
                           type="button"
-                          variant="secondary"
+                          variant="primary"
                           label="Visualizar"
                           onClick={() => handleViewFile(file)}
                         />
@@ -527,6 +521,9 @@ export default function Exam() {
                 variant="secondary"
                 label="Fechar"
                 onClick={handleCloseModal}
+                customStyles={{
+                  alignSelf: "center",
+                }}
               />
               <Button
                 type="button"
@@ -538,6 +535,9 @@ export default function Exam() {
                 onClick={() =>
                   handleDownloadFile(selectedFile.id, selectedFile.filename)
                 }
+                customStyles={{
+                  alignSelf: "center",
+                }}
               />
             </div>
           </div>
