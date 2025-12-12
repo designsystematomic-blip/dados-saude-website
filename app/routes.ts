@@ -11,4 +11,5 @@ export default [
   route("exam/new", "routes/exam.new.tsx"),
   route("exam/:id/edit", "routes/exam.$id.edit.tsx"),
   route("profile", "routes/profile.tsx"),
+  route("logout", "routes/logout.tsx"),
 ] satisfies RouteConfig;

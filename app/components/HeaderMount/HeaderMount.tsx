@@ -1,4 +1,5 @@
 import {
+  Button,
   Drawer,
   Header,
   IconAccount,
@@ -35,6 +36,17 @@ export default function HeaderMount() {
   if (!user) {
     return;
   }
+
+  const handleLogout = () => {
+    fetch("/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      window.location.href = "/login";
+    });
+  };
 
   const menuItems: any[] = [
     {
@@ -156,6 +168,23 @@ export default function HeaderMount() {
             fontFamily="primary"
           />
         </a>
+      ),
+    },
+    {
+      iconLeft: "",
+      iconRight: "",
+      variant: "secondary",
+      children: (
+        <Button
+          variant="tertiary"
+          label="Sair"
+          type="button"
+          onClick={() => handleLogout()}
+          customStyles={{
+            width: "100%",
+            marginRight: "auto",
+          }}
+        />
       ),
     },
   ];

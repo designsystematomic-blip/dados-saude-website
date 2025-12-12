@@ -406,7 +406,7 @@ export default function Exam() {
                               onClick={() => handleViewFile(file)}
                             />
                           )}
-                          {isPdfFile(file.mimeType) && (
+                          {/* {isPdfFile(file.mimeType) && (
                             <div
                               className={styles.pdfThumbnail}
                               onClick={() => handleViewFile(file)}
@@ -417,7 +417,7 @@ export default function Exam() {
                                 textColor="var(--color-text-secondary)"
                               />
                             </div>
-                          )}
+                          )} */}
                         </div>
                       )}
                     </div>

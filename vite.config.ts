@@ -19,7 +19,9 @@ export default defineConfig({
       "samba-birth-abs-baskets.trycloudflare.com", // Remova o https://
       // Você também pode adicionar outros hosts se necessário:
       "localhost",
-      ".trycloudflare.com", // Permite qualquer subdomínio do trycloudflare.com
+      ".trycloudflare.com", // Permite qualquer subdomínio do trycloudflare.com,
+      "roberto-platiest-visionally.ngrok-free.dev",
+      "ngrok-free.dev",
     ],
   },
   resolve: {

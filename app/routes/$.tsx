@@ -23,7 +23,7 @@ export default function Route404() {
         >
           <Title
             tag="h1"
-            content="Alguma coisa deu errado, tente mais tarde! "
+            content="Ops! Essa página ainda não foi criada."
             fontFamily="primary"
             textAlign="center"
           />
