@@ -31,9 +31,11 @@ export default function Login({ loaderData }: Route.ComponentProps) {
   return (
     <div className={styles.loginPage}>
       <Wrapper>
-        <div className={styles.headerLogo}>
-          <img src={logoWithName} alt="Logo" />
-        </div>
+        <Link to="/login" aria-label="Ir para tela de login">
+          <div className={styles.headerLogo}>
+            <img src={logoWithName} alt="Logo" />
+          </div>
+        </Link>
         <div>
           <form
             method="post"

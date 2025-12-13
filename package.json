@@ -11,7 +11,8 @@
     "link:lib": "npm link design-system-atomic",
     "unlink": "npm unlink design-system-atomic",
     "generate": "cross-env NODE_OPTIONS=\"--import tsx\" plop --plopfile=./generate/plopfile.ts",
-    "update:lib": "npm install design-system-atomic@latest"
+    "update:lib": "npm install design-system-atomic@latest",
+    "tunnel": "cloudflared tunnel --url http://localhost:5173"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

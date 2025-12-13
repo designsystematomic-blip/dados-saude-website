@@ -500,20 +500,22 @@ export default function Exam() {
               />
             </div>
             <div className={styles.modalBody}>
-              {isImageFile(selectedFile.mimeType) && (
-                <img
-                  src={getFileUrl(selectedFile.id)}
-                  alt={selectedFile.filename}
-                  className={styles.modalImage}
-                />
-              )}
-              {isPdfFile(selectedFile.mimeType) && (
-                <iframe
-                  src={getFileUrl(selectedFile.id)}
-                  className={styles.modalPdf}
-                  title={selectedFile.filename}
-                />
-              )}
+              <div className={styles.modalFileContainer}>
+                {isImageFile(selectedFile.mimeType) && (
+                  <img
+                    src={getFileUrl(selectedFile.id)}
+                    alt={selectedFile.filename}
+                    className={styles.modalImage}
+                  />
+                )}
+                {isPdfFile(selectedFile.mimeType) && (
+                  <iframe
+                    src={getFileUrl(selectedFile.id)}
+                    className={styles.modalPdf}
+                    title={selectedFile.filename}
+                  />
+                )}
+              </div>
             </div>
             <div className={styles.modalFooter}>
               <Button
