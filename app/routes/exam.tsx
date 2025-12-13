@@ -29,6 +29,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const examsResponse = await examService.getExams({ token: userData.token, userId: userData.id, filter: { name: searchParamName ?? undefined } });
   const userExames = await examsResponse.json();
 
+  userExames.exams.sort((a: any, b: any) => sorteDate(a.createdAt, b.createdAt));
+
   return {
     meta: {
       title: "Exame",
@@ -37,4 +39,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     user: userData,
     exams: userExames.exams
   };
+}
+
+function sorteDate(dateA: string, dateB: string) {
+  return new Date(dateB).getTime() - new Date(dateA).getTime();
 }

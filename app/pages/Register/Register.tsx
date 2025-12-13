@@ -51,7 +51,9 @@ export default function Register({ loaderData }: Route.ComponentProps) {
   return (
     <div className={styles.page}>
       <Wrapper>
-        <Logo />
+        <Link to="/login" aria-label="Ir para tela de login" style={{ cursor: 'pointer' }}>
+          <Logo />
+        </Link>
         <div className={styles.content + " " + styles.flexColumn}>
           <form method="post" onSubmit={handleSubmit(handleFetcher)}>
             <div

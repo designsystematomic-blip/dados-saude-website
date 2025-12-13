@@ -464,8 +464,10 @@ export default function ExamNew() {
                     >
                       <Camera
                         buttonRetakePhotoText="Capturar novamente"
-                        buttonTakePhotoText="Capturar foto"
+                        buttonTakePhotoText="Capturar"
                         mirrorText="Espelhar"
+                        buttonFacingModeEnvironmentText="Câmera traseira"
+                        buttonFacingModeText="Câmera frontal"
                         onCapture={(imageSrc) => {
                           // Convert base64 to File object
                           const byteString = atob(imageSrc.split(",")[1]);
