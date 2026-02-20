@@ -433,8 +433,5 @@ cd dados-saude-website && npm link design-system-atomic && npm run dev
 
 ## 📝 Licença
 
-Este projeto é parte do projeto de conclusão de pós-graduação do IFBA.
+MIT
 
-## 👥 Dúvidas?
-
-amandaprates1997@gmail.com
